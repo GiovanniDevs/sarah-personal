@@ -1,0 +1,111 @@
+/* Design tokens.
+   Every value below is taken from design/Career CV Mobile.dc.html, screens 2a-2f.
+   Nothing here is rounded or adjusted; 15.5px, 12.5px and .09em are as designed.
+   This file defines tokens only. No layout, no components, no page styles. */
+
+:root {
+  /* Colour — 11 values, 19 roles.
+     More roles than values on purpose: #EAEAEA is both a quiet block background
+     and a hairline border, and those two uses may diverge later. */
+
+  /* Surfaces */
+  --color-surface: #fff;
+  --color-surface-quiet: #EAEAEA;
+  --color-surface-accent: #CBC5EA;
+  --color-surface-inverse: #183642;
+
+  /* Borders */
+  --color-border: #EAEAEA;
+  --color-border-emphasis: #73628A;
+  --color-border-placeholder: #CBC5EA;
+
+  /* Text */
+  --color-text-heading: #183642;
+  --color-text-body: #3d4756;
+  --color-text-supporting: #6b7280;
+  --color-text-caption: #8b8f99;
+  --color-text-accent: #73628A;
+  --color-text-on-quiet: #313D5A;
+  --color-text-on-inverse: #fff;
+  --color-text-muted-inverse: #8fa0ad;
+  --color-text-placeholder: #b3aecb;
+
+  /* Interactive */
+  --color-action: #313D5A;
+  --color-on-action: #fff;
+  --color-action-inverse: #CBC5EA;
+  --color-on-action-inverse: #183642;
+
+  /* Font families.
+     system-ui sits in the body stack so text is readable before the webfont lands. */
+  --font-heading: Marcellus, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+
+  /* Font weights. Marcellus is used at 400 only. */
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Font sizes — 15, named for the role each plays in the design. */
+  --text-hero: 30px;        /* homepage h1 */
+  --text-title: 28px;       /* interior page h1 */
+  --text-title-post: 26px;  /* blog post h1; also the decorative quote glyph */
+  --text-subhead: 20px;     /* h2 inside post body */
+  --text-section: 19px;     /* "Get in touch" section heading */
+  --text-item: 18px;        /* fee item name, blog index post title */
+  --text-item-lead: 17px;   /* logo wordmark, price figure, blog CTA heading */
+  --text-lead: 16px;        /* hero lead paragraph, primary button label */
+  --text-prose: 15.5px;     /* long-form body copy */
+  --text-body: 15px;        /* default paragraph, testimonial body, step text */
+  --text-small: 14px;       /* fee descriptions, excerpts, footer email, "→" links */
+  --text-caption: 13px;     /* captions, attribution, "← All posts", logo mark */
+  --text-fine: 12.5px;      /* "Opens calendly.com in a new tab" */
+  --text-eyebrow: 12px;     /* uppercase labels, dates, copyright */
+  --text-badge: 11px;       /* "Most booked" badge */
+
+  /* Line heights — 7. */
+  --leading-none: 1;        /* decorative quote glyph */
+  --leading-hero: 1.18;     /* homepage h1 */
+  --leading-title: 1.25;    /* blog post h1 */
+  --leading-item: 1.3;      /* blog index card title */
+  --leading-compact: 1.5;
+  --leading-body: 1.55;
+  --leading-prose: 1.65;    /* post body copy */
+
+  /* Letter spacing — 3. */
+  --tracking-wordmark: .02em;
+  --tracking-badge: .06em;
+  --tracking-eyebrow: .09em;
+
+  /* Border radii — 6. */
+  --radius-button: 8px;
+  --radius-quote: 10px;     /* blog pull-quote block */
+  --radius-card: 12px;      /* testimonial, fee and blog index cards */
+  --radius-panel: 14px;     /* hero image, Calendly step panel */
+  --radius-pill: 999px;     /* "Most booked" badge */
+  --radius-circle: 50%;     /* logo mark */
+
+  /* Spacing — all 16 values the design uses, named by value.
+     Ten (4, 6, 8, 10, 12, 14, 18, 20, 24, 26) are a rhythm repeated across all six
+     screens with no single role to name them after. The other six belong to one
+     component each — 2 badge padding and hamburger bar, 9 logo gap and badge offset,
+     13 and 15 the two button paddings, 16 Calendly panel margin and step number width,
+     22 that panel's padding — so role names would pre-empt component decisions.
+     Colour keeps the role-not-appearance rule: nothing here is called --periwinkle. */
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-9: 9px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-13: 13px;
+  --space-14: 14px;
+  --space-15: 15px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-22: 22px;
+  --space-24: 24px;
+  --space-26: 26px;
+}
