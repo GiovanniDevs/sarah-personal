@@ -1,0 +1,53 @@
+{#- The six menu items from the briefing's page table. Contact is an anchor to a
+    section on the homepage, not a page of its own — section 5 of the briefing.
+    Kept inline rather than in _data/nav.json: it is one short list, edited by us
+    and never by Sarah, and a second file would only spread it out. -#}
+{% set navItems = [
+  { label: "Home",                href: "/" },
+  { label: "Testimonials",        href: "/testimonials/" },
+  { label: "Fees",                href: "/fees/" },
+  { label: "Book a consultation", href: "/book/" },
+  { label: "Blog",                href: "/blog/" },
+  { label: "Contact",             href: "/#contact" }
+] %}
+
+<header class="site-header">
+  <div class="site-header__bar">
+
+    {#- aria-hidden on the mark so the link reads "Sarah Philip", not "SP Sarah Philip".
+        The design has CV / Career CV here; SP / Sarah Philip is the briefing's working
+        name and your instruction. -#}
+    <a class="site-brand" href="/">
+      <span class="site-brand__mark" aria-hidden="true">SP</span>
+      <span class="site-brand__name">Sarah Philip</span>
+    </a>
+
+    {#- A real button, so Enter and Space both activate it with no key handling of
+        our own, and it is in the tab order for free. type="button" because the
+        default is submit.
+
+        aria-expanded is the attribute a screen reader announces as collapsed or
+        expanded, and base.css keys the panel off that same attribute — one piece
+        of state, so the announcement and the visible panel cannot disagree.
+
+        The label stays "Menu" when open. aria-expanded already carries the state;
+        renaming the control to "Close" mid-interaction changes its identity under
+        someone who is listening to it. -#}
+    <button type="button" class="menu-toggle"
+            aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+
+  {#- Sibling of the bar rather than inside it, so the panel spans the full width
+      below the header row. -#}
+  <nav id="site-nav" class="site-nav">
+    <ul class="site-nav__list">
+      {%- for item in navItems %}
+      <li><a href="{{ item.href }}"{% if item.href == page.url %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+      {%- endfor %}
+    </ul>
+  </nav>
+
+</header>

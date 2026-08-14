@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{#- The site's second script, and the reason the menu never flashes open on load.
+    It runs before the stylesheets are parsed, so by the time the header paints,
+    base.css already knows JavaScript is available and has collapsed the nav.
+    It must stay inline and stay here; an external file would arrive too late. -#}
+<script>document.documentElement.className += " js";</script>
+
+{#- Whole title from front matter, no "Page · Sarah Philip" suffix. A separator
+    convention invented here would bind every page that follows it. -#}
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+
+{#- fonts before tokens before base: @font-face, then the values, then the uses. -#}
+<link rel="stylesheet" href="/styles/fonts.css">
+<link rel="stylesheet" href="/styles/tokens.css">
+<link rel="stylesheet" href="/styles/base.css">
+</head>
+<body>
+
+{% include "header.njk" %}
+
+<main>{{ content | safe }}</main>
+
+{% include "footer.njk" %}
+
+{#- defer, so the header exists by the time it runs and menu.js needs no
+    DOMContentLoaded wrapper. -#}
+<script src="/scripts/menu.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+/* The page shell: document defaults, header, menu, footer. Nothing else.
+
+   Every colour, font, size and space comes from tokens.css — there is no hex value
+   in this file. The exceptions are four component dimensions the token set has no
+   name for (the 30px brand mark, the 20/14/2px hamburger bars). They are literals
+   here, with the design's figure noted, because tokens.css says of itself that it
+   holds no layout and no components.
+
+   Mobile-first with no breakpoints: the approved design is six mobile screens and
+   specifies nothing wider. Breakpoints get added upward when a wide design exists. */
+
+
+/* ---------- Document ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-surface);
+  color: var(--color-text-body);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+
+/* ---------- Header ---------- */
+
+/* The border sits on the header rather than the bar, so when the menu is open the
+   hairline stays at the bottom of the whole thing, below the last link. */
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-14) var(--space-20);
+}
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+  text-decoration: none;
+}
+
+.site-brand__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;   /* the mark's diameter in the design; a component size, not a token */
+  height: 30px;
+  border-radius: var(--radius-circle);
+  background: var(--color-action);
+  color: var(--color-on-action);
+  font-family: var(--font-heading);
+  font-size: var(--text-caption);
+}
+
+.site-brand__name {
+  color: var(--color-text-heading);
+  font-family: var(--font-heading);
+  font-size: var(--text-item-lead);
+  letter-spacing: var(--tracking-wordmark);
+}
+
+
+/* ---------- Menu toggle ---------- */
+
+/* Hidden until the inline script in base.njk confirms JavaScript is running.
+   Without it the nav below stays permanently visible, and a hamburger sitting
+   above an already-open list would be a control that does nothing. */
+.menu-toggle {
+  display: none;
+}
+
+.js .menu-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* 20px x 2px bars; the design makes the third one shorter at 14px. */
+.menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-text-heading);
+}
+
+.menu-toggle span:last-child {
+  width: 14px;
+}
+
+
+/* ---------- Menu panel ---------- */
+
+/* One source of truth. aria-expanded on the button decides both what a screen
+   reader announces and whether the panel is shown, so menu.js only ever flips that
+   attribute. :has() is what lets CSS read it from here — the button and the panel
+   are not siblings, since the panel spans the full width below the header bar. */
+.js .site-nav {
+  display: none;
+}
+
+.js .site-header:has(.menu-toggle[aria-expanded="true"]) .site-nav {
+  display: block;
+}
+
+.site-nav__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The same hairline the header sits on, repeated between items. On the first item
+   it also separates the panel from the bar above it. */
+.site-nav__list a {
+  display: block;
+  padding: var(--space-14) var(--space-20);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-heading);
+  text-decoration: none;
+}
+
+.site-nav__list a[aria-current="page"] {
+  font-weight: var(--weight-semibold);
+}
+
+
+/* ---------- Footer ---------- */
+
+/* Screens 2b-2f: email and copyright on the dark ground. */
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-18) var(--space-24);
+  background: var(--color-surface-inverse);
+}
+
+.site-footer__email {
+  color: var(--color-action-inverse);
+  font-size: var(--text-small);
+  text-decoration: none;
+}
+
+.site-footer__legal {
+  color: var(--color-text-muted-inverse);
+  font-size: var(--text-eyebrow);
+}
+
+
+/* Screen 2a: the same block doing double duty as the contact section.
+
+   Two differences below look like slips in the mockup and are not, so they are
+   reproduced as drawn: the email is 15px here against 14px everywhere else, and
+   only this variant carries a top margin — it is what separates the block from the
+   testimonial teaser above it, which has no bottom margin of its own. */
+.site-footer--contact {
+  gap: var(--space-10);
+  margin-top: var(--space-24);
+  padding: var(--space-24);
+}
+
+.site-footer--contact .site-footer__email {
+  font-size: var(--text-body);
+}
+
+/* A heading element where the design has a plain span, so the contact section is
+   announced as one. Marcellus ships at 400 only, hence the explicit weight. */
+.site-footer__heading {
+  margin: 0;
+  color: var(--color-text-on-inverse);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-section);
+}
+
+.site-footer__intro {
+  margin: 0;
+  color: var(--color-text-muted-inverse);
+  font-size: var(--text-small);
+  line-height: var(--leading-compact);
+}
+
+.site-footer__button {
+  margin-top: var(--space-4);
+  padding: var(--space-13) var(--space-20);
+  border-radius: var(--radius-button);
+  background: var(--color-action-inverse);
+  color: var(--color-on-action-inverse);
+  font-size: var(--text-body);
+  font-weight: var(--weight-bold);
+  text-align: center;
+  text-decoration: none;
+}
+
+.site-footer--contact .site-footer__legal {
+  margin-top: var(--space-8);
+}

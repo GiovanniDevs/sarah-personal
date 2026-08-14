@@ -3,6 +3,7 @@ module.exports = function (eleventyConfig) {
   // these land at _site/fonts and _site/styles.
   eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addPassthroughCopy("src/styles");
+  eleventyConfig.addPassthroughCopy("src/scripts");
 
   return {
     dir: {
