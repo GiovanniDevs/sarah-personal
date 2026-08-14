@@ -35,6 +35,8 @@
   --color-on-action: #fff;
   --color-action-inverse: #CBC5EA;
   --color-on-action-inverse: #183642;
+  --color-link: #313D5A;
+  --color-link-hover: #73628A;
 
   /* Font families.
      system-ui sits in the body stack so text is readable before the webfont lands. */
