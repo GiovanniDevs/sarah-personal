@@ -3,6 +3,7 @@ layout: base.njk
 title: Book a consultation
 description: Booking is by email. Send Sarah a short message and she'll reply to arrange a time that suits you.
 ---
+
 {#- Screen 2d, minus the Calendly. The mockup predates the briefing's decision
     that booking is by email — see "Pages in scope" and section 5, and the note
     saying the briefing wins. So: layout and type from 2d, content from the
@@ -12,8 +13,7 @@ description: Booking is by email. Send Sarah a short message and she'll reply to
 
     No permalink and no contactFooter, as on 2b and 2c: this file maps to /book/,
     which the nav and the buttons on 2b and 2c already point at, and the compact
-    dark footer comes from leaving contactFooter unset. -#}
-
+dark footer comes from leaving contactFooter unset. -#}
 {#- PROPOSED COPY, awaiting your sign-off. The h1 is the design's own, verbatim;
     the lead and the three steps are new, because what they replace was about
     Calendly. Two facts are reused rather than invented: "free 20-minute intro
@@ -23,14 +23,13 @@ description: Booking is by email. Send Sarah a short message and she'll reply to
   "She replies within one working day with a few times",
   "You pick one, and that's your free 20-minute intro call"
 ] %}
-
 <div class="page-head">
   <h1 class="page-head__title">Book a consultation</h1>
-  <p class="page-head__lead">Booking is by email. Send Sarah a short message and she'll reply to arrange a time that suits you.</p>
+  <p class="page-head__lead">
+    Booking is by email. Send Sarah a message and she'll reply to arrange a time that suits you.
+  </p>
 </div>
-
 <div class="book-panel">
-
   {#- An ol where the design has plain divs — three steps in a fixed order are an
       ordered list, and saying so gets "list, 3 items" announced first. The
       numbers are spans rather than ::marker because the design gives them a
@@ -38,10 +37,11 @@ description: Booking is by email. Send Sarah a short message and she'll reply to
       three. No aria-hidden: like the badge on 2c they are information. -#}
   <ol class="book-steps">
     {%- for step in steps %}
-    <li class="book-step"><span class="book-step__number">{{ loop.index }}</span>{{ step }}</li>
+      <li class="book-step">
+        <span class="book-step__number">{{ loop.index }}</span>{{ step }}
+      </li>
     {%- endfor %}
   </ol>
-
   {#- TODO-SARAH: the dedicated email address — briefing section 6, question 4.
       Two lines change when we have it and nothing else on this page: this href
       becomes mailto:ADDRESS?subject=Consultation%20enquiry, and the span below
@@ -55,7 +55,6 @@ description: Booking is by email. Send Sarah a short message and she'll reply to
       stays plain ASCII so the encoding is legible, and puts no words in the
       visitor's mouth. -#}
   <a class="button" href="TODO-SARAH-email-address">Email Sarah to book</a>
-
   {#- 2d's "Opens calendly.com in a new tab" slot, now load-bearing. A mailto: on
       a device with no mail client does nothing visible, so the address must be
       readable, selectable text too. One sentence says what the button does and
@@ -67,6 +66,7 @@ description: Booking is by email. Send Sarah a short message and she'll reply to
       from the mockup: 2d's caption is 12.5px in --color-text-caption, ~2.6:1 on
       this grey — fine for a throwaway note, not for the one string a visitor may
       have to read off the screen and type elsewhere. -#}
-  <p class="book-panel__address">Opens your email app, addressed to <span class="book-panel__email">TODO-SARAH — email address</span></p>
-
+  <p class="book-panel__address">
+    Opens your email app, addressed to <span class="book-panel__email">TODO-SARAH — email address</span>
+  </p>
 </div>
