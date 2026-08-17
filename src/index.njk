@@ -1,7 +1,44 @@
 ---
 layout: base.njk
-title: Placeholder — base layout check
-description: Temporary page, exists only to render the shell.
+title: Career coaching that gets you moving again.
+description: One-to-one coaching with Sarah Philip — CVs, interviews and job search strategy for people ready for what's next.
 contactFooter: true
 ---
-<p style="padding: 24px">Placeholder body. This page exists only so the base layout has something to wrap.</p>
+{#- Screen 2a. title and description are the design's own h1 and lead paragraph,
+    used verbatim rather than written fresh — both are already approved copy. -#}
+
+{#- TODO-SARAH: hero photo. The box below is the mockup's empty image slot, kept
+    as a div because there is nothing to describe in an alt yet. When the photo
+    arrives, replace the inner div with an <img> and write its alt. -#}
+<div class="hero-media">
+  <div class="hero-media__placeholder">Sarah — personal photo</div>
+</div>
+
+<div class="hero">
+  <h1 class="hero__title">Career coaching that gets you moving again.</h1>
+  <p class="hero__lead">One-to-one coaching with Sarah Philip — CVs, interviews and job search strategy for people ready for what's next.</p>
+
+  {#- TODO-SARAH: Calendly booking link. The href is deliberately not a URL — it
+      404s on click, so this cannot go live looking like a working button, and
+      the marker survives into the built HTML where a scan of _site finds it. -#}
+  <a class="button" href="TODO-SARAH-calendly-url">Book a consultation</a>
+
+  <span class="hero__note">Free 20-minute intro call, via Calendly</span>
+</div>
+
+{#- TODO-SARAH: About copy. The paragraph is the design's placeholder and says so
+    on the page; left exactly as drawn. -#}
+<section class="about">
+  <h2 class="eyebrow">About Sarah</h2>
+  <p class="about__body">Short intro — Sarah's background, who she helps, how sessions work. Copy from Sarah to follow. Two or three sentences, no more.</p>
+</section>
+
+{#- TODO-SARAH: testimonial quote. As above — the design's placeholder, announcing
+    itself on the page. The link goes to the full testimonials page. -#}
+<section class="teaser">
+  <h2 class="eyebrow">What clients say</h2>
+  <blockquote class="teaser__quote">
+    <p>"Placeholder testimonial — copy from Sarah to follow."</p>
+  </blockquote>
+  <a class="teaser__link" href="/testimonials/">All testimonials →</a>
+</section>

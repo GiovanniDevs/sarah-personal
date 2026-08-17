@@ -1,4 +1,6 @@
 /* The page shell: document defaults, header, menu, footer. Nothing else.
+   Everything inside the shell — shared components and page sections — is in
+   pages.css, which loads after this file.
 
    Every colour, font, size and space comes from tokens.css — there is no hex value
    in this file. The exceptions are four component dimensions the token set has no
