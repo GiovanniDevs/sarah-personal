@@ -1,0 +1,71 @@
+---
+layout: base.njk
+title: Fees
+description: Plain pricing, no packages you don't need. Final figures from Sarah.
+---
+{#- Screen 2c. As on 2a and 2b, title and description are the design's own h1 and
+    lead, used verbatim rather than written fresh.
+
+    No contactFooter and no permalink, for the same two reasons as 2b: the compact
+    dark footer comes from leaving contactFooter off, and Eleventy maps this file
+    to /fees/, which is what header.njk already links to and what makes
+    aria-current="page" fire. -#}
+
+{#- TODO-SARAH: the prices. All three are the design's placeholder — a euro sign
+    and an em dash, no figure. They stay that way until Sarah gives us numbers;
+    a wrong price on a fees page is worse than an obviously absent one.
+
+    A list plus a loop rather than three copy-pasted cards, the same call
+    testimonials.njk and header.njk make: the markup is identical every time and
+    only the strings differ.
+
+    featured is the one flag that decides which card gets the purple outline and
+    the "Most booked" badge. Note this differs from the design, which draws them
+    on the mock interview card — moving them is a matter of shifting that one
+    word to another entry, and nothing else changes. -#}
+{% set services = [
+  { name: "Career coaching session",  price: "€—", detail: "60 minutes, one-to-one. Goal setting and next steps.", featured: true },
+  { name: "CV & cover letter review", price: "€—", detail: "Written feedback plus a rewritten draft." },
+  { name: "Mock interview",           price: "€—", detail: "Realistic practice with structured feedback." }
+] %}
+
+<div class="page-head">
+  <h1 class="page-head__title">Fees</h1>
+  <p class="page-head__lead">Plain pricing, no packages you don't need. Final figures from Sarah.</p>
+</div>
+
+{#- A ul where the design has plain divs: three services are a list, and saying so
+    gets "list, 3 items" announced before them. The reset it needs is in pages.css,
+    as it already is for the nav in base.css. -#}
+<ul class="fees">
+  {%- for s in services %}
+
+  {#- The badge is real text and comes first, as the design draws it, so the card
+      reads "Most booked, Career coaching session". No aria-hidden — unlike the
+      quote glyph on 2b it is information, not ornament.
+
+      The price sits outside the h2 rather than inside it. Within the heading it
+      would be announced as part of the name — "Career coaching session, euro
+      dash" — so the row is a wrapper and the heading holds the name alone. -#}
+  <li class="fee{% if s.featured %} fee--featured{% endif %}">
+    {%- if s.featured %}
+    <span class="fee__badge">Most booked</span>
+    {%- endif %}
+    <div class="fee__row">
+      <h2 class="fee__name">{{ s.name }}</h2>
+      <p class="fee__price">{{ s.price }}</p>
+    </div>
+    <p class="fee__detail">{{ s.detail }}</p>
+  </li>
+  {%- endfor %}
+</ul>
+
+{#- The design's button points at screen 2d, so this is the Book page and not the
+    homepage's Calendly marker — the same call testimonials.njk made.
+
+    The closing line is a plain paragraph. The design gives it no anchor of any
+    kind, so it is not a link. -#}
+<div class="fee-cta">
+  <a class="button" href="/book/">Book a consultation</a>
+  <p class="fee-cta__note">Not sure which fits? Start with the free intro call.</p>
+</div>
