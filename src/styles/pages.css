@@ -149,3 +149,108 @@
   font-weight: var(--weight-semibold);
   text-decoration: none;
 }
+
+
+/* ---------- 2b Testimonials ---------- */
+
+/* The heading and lead that open an interior page. Named for the job rather than
+   for this page because the design draws the same block on 2c Fees, but it stays
+   down here until Fees exists: one caller, so by the rule at the top of this
+   file it has not earned a place in Components yet. Move it up when 2c lands. */
+.page-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-26) var(--space-24) var(--space-8);
+}
+
+/* As .hero__title: Marcellus ships at 400 only, hence the explicit weight. No
+   line-height, because the design's interior h1 specifies none. */
+.page-head__title {
+  margin: 0;
+  color: var(--color-text-heading);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-title);
+}
+
+/* Only the two properties that differ from the body defaults in base.css — the
+   design's lead is already 15px in the body colour, and 1.5 rather than 1.55. */
+.page-head__lead {
+  margin: 0;
+  line-height: var(--leading-compact);
+}
+
+/* The card list. Holds the booking button as its last child, as the design does,
+   which is what the note on .testimonial's banding below is about. */
+.testimonials {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  padding: var(--space-18) var(--space-20) var(--space-26);
+}
+
+/* One card. margin: 0 resets the browser's blockquote indent, so the flex gap
+   above is the only spacing.
+
+   min-height and not height: the briefing calls these fixed-size blocks and 120
+   is the design's figure, but a real testimonial longer than the placeholder
+   should push the card taller rather than spill out of it. A component
+   dimension, so a literal with the design's number noted — as with the 240px
+   hero frame above.
+
+   Grey is the resting state; the rule further down makes every second card
+   periwinkle. The quote text is the same colour on both grounds, so it is set
+   once here and inherited. */
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  min-height: 120px;
+  margin: 0;
+  padding: var(--space-20);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-quiet);
+  color: var(--color-text-on-quiet);
+}
+
+/* The decorative quote glyph. tokens.css names both of these as its own. */
+.testimonial__mark {
+  color: var(--color-text-accent);
+  font-family: var(--font-heading);
+  font-size: var(--text-title-post);
+  line-height: var(--leading-none);
+}
+
+.testimonial__quote {
+  margin: 0;
+}
+
+.testimonial__by {
+  color: var(--color-text-accent);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+}
+
+/* The alternating grey and periwinkle grounds. Card one grey, two periwinkle,
+   three grey, as drawn.
+
+   Deliberately nth-child and not a modifier class on each card: the browser
+   evaluates it against however many cards are actually there, so the two to five
+   the briefing asks for all band correctly with nothing to edit here and no
+   sequence to keep in step by hand.
+
+   The periwinkle card changes more than its background — on the darker ground
+   the glyph and the attribution go from purple to navy for contrast.
+
+   The one thing to know: nth-child counts every child of .testimonials, and the
+   booking button is one of them. It is last, so it changes nothing. A card added
+   after it would be coloured as though the button were a card. */
+.testimonial:nth-child(even) {
+  background: var(--color-surface-accent);
+}
+
+.testimonial:nth-child(even) .testimonial__mark,
+.testimonial:nth-child(even) .testimonial__by {
+  color: var(--color-text-on-quiet);
+}
