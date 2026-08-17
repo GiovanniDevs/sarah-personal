@@ -10,26 +10,21 @@
     page leaves it unset and gets the compact block.
 
     hello@careercv.ie and "© 2026 Career CV" are the design's placeholders, awaiting
-    Sarah's real address and final site name. Left exactly as designed. -#}
-
-<footer class="site-footer{% if contactFooter %} site-footer--contact{% endif %}"{% if contactFooter %} id="contact"{% endif %}>
-
-  {%- if contactFooter %}
-  <h2 class="site-footer__heading">Get in touch</h2>
-  <p class="site-footer__intro">Questions before booking? Email is best — replies within one working day.</p>
-  {%- endif %}
-
-  {#- The mockup links this to another screen; a real mailto: is the briefing's
+Sarah's real address and final site name. Left exactly as designed. -#}
+<footer class="site-footer{% if contactFooter %} site-footer--contact{% endif %}"
+        {% if contactFooter %}id="contact"{% endif %}>
+    {%- if contactFooter %}
+        <h2 class="site-footer__heading">Get in touch</h2>
+        <p class="site-footer__intro">Questions before booking? Replies within one working day.</p>
+    {%- endif %}
+    {#- The mockup links this to another screen; a real mailto: is the briefing's
       "dedicated email address as a tap-to-email link".
 
       TODO-SARAH: dedicated email address. hello@careercv.ie is the design's
       placeholder, awaiting Sarah's real address. Left exactly as designed. -#}
-  <a class="site-footer__email" href="mailto:hello@careercv.ie">hello@careercv.ie</a>
-
-  {%- if contactFooter %}
-  <a class="site-footer__button" href="/book/">Book a consultation</a>
-  {%- endif %}
-
-  <span class="site-footer__legal">© 2026 Career CV{% if contactFooter %} · Dublin, Ireland{% endif %}</span>
-
+    <a class="site-footer__email" href="mailto:hello@careercv.ie">hello@careercv.ie</a>
+    {%- if contactFooter %}<a class="site-footer__button" href="/book/">Book a consultation</a>{%- endif %}
+    <span class="site-footer__legal">© 2026 Career CV
+        {% if contactFooter %}· Dublin, Ireland{% endif %}
+    </span>
 </footer>

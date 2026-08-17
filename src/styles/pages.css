@@ -377,3 +377,78 @@
   font-size: var(--text-caption);
   text-align: center;
 }
+
+
+/* ---------- 2d Book ---------- */
+
+/* The grey panel holding the steps, the button and the address.
+   The design's margin is 16px 20px 0, its zero bottom relying on the "Prefer
+   email?" block below to carry the gap to the footer. That block is gone — see
+   book.njk — so the bottom is 26, which is the gutter 2b and 2c already leave
+   between their last content and the dark footer. */
+.book-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  margin: var(--space-16) var(--space-20) var(--space-26);
+  padding: var(--space-22) var(--space-20);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-quiet);
+}
+
+/* An ol in the markup, so the browser's numbering and indent are reset here —
+   the same three lines .fees needs above. The visible numbers are spans; see
+   the note in book.njk. */
+.book-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Baseline and not centre, so the 14px number and the 15px step text sit on the
+   same line. The step text needs no class of its own: 15px is the body default
+   from base.css, and the colour is set here and inherited. */
+.book-step {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-10);
+  color: var(--color-text-on-quiet);
+}
+
+/* flex: none so the fixed 16px column cannot be squeezed by a step long enough
+   to wrap. */
+.book-step__number {
+  flex: none;
+  width: var(--space-16);
+  color: var(--color-text-accent);
+  font-size: var(--text-small);
+  font-weight: var(--weight-bold);
+}
+
+/* .button carries a 6px top margin for its use on 2a. Here the panel's gap does
+   that job, so it is cleared for this caller — the same line .fee-cta has. */
+.book-panel .button {
+  margin-top: 0;
+}
+
+/* The line under the button. It occupies 2d's caption slot but not its type:
+   the mockup's 12.5px --color-text-caption is ~2.6:1 on this grey, and this
+   text is an email address someone may have to read and retype. --text-small in
+   the panel's own body colour is ~9:1. Reasoning in full in book.njk. */
+.book-panel__address {
+  margin: 0;
+  color: var(--color-text-on-quiet);
+  font-size: var(--text-small);
+  line-height: var(--leading-compact);
+  text-align: center;
+}
+
+/* The address within that sentence. Semibold is what the design gives the
+   address on 2d — there as a link, here as plain text, so the weight is all
+   that carries over. */
+.book-panel__email {
+  font-weight: var(--weight-semibold);
+}
