@@ -57,8 +57,7 @@
 /* ---------- Components ---------- */
 
 /* The primary booking button. Screen 2a's hero; the design repeats it on 2b, 2c
-   and 2f. Not to be confused with .site-footer__button in base.css — that one is
-   the periwinkle variant that only appears on the dark ground.
+   and 2f.
 
    350px is the width the design draws it at: the 390px mockup less its 20px
    gutters. display: block would otherwise fill whatever it sits in, which inside
@@ -915,15 +914,15 @@
   font-size: var(--text-item-lead);
 }
 
-/* The third button in the set, and the only one on a periwinkle ground: dark teal,
-   where .button above is navy and .site-footer__button is periwinkle on the dark
-   footer. Scoped to this block rather than made a variant of .button — it differs
-   in ground, size and padding, which leaves only the radius shared.
+/* The second button in the set, and the only one on a periwinkle ground: dark teal,
+   where .button above is navy. Scoped to this block rather than made a variant of
+   .button — it differs in ground, size and padding, which leaves only the radius
+   shared.
 
-   No display: block. It is a flex item of .post-cta, so it already fills the
-   width, which is the same reason .site-footer__button does without one — and
-   because it is not .button it needs its own copy of that class's 350px cap rather
-   than inheriting it. Same two declarations, same number, same reason: 350px is the
+   No display: block. It is a flex item of .post-cta, so it already fills the width
+   without one — and because it is not .button it needs its own copy of that class's
+   350px cap rather than inheriting it. Same two declarations, same number, same
+   reason: 350px is the
    width the design draws a button at, and below that the cap does nothing and the
    button is full width as drawn. width: 100% for the reason spelled out on .button —
    it is a flex item, and the auto margins would otherwise stop it stretching and
