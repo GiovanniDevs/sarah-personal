@@ -47,15 +47,15 @@ description: Plain pricing, no packages you don't need. Final figures from Sarah
       The price sits outside the h2 rather than inside it. Within the heading it
       would be announced as part of the name — "Career coaching session, euro
       dash" — so the row is a wrapper and the heading holds the name alone. -#}
-  <li class="fee{% if s.featured %} fee--featured{% endif %}">
+  <li class="card{% if s.featured %} card--featured{% endif %}">
     {%- if s.featured %}
     <span class="fee__badge">Most booked</span>
     {%- endif %}
     <div class="fee__row">
-      <h2 class="fee__name">{{ s.name }}</h2>
+      <h2 class="card__title">{{ s.name }}</h2>
       <p class="fee__price">{{ s.price }}</p>
     </div>
-    <p class="fee__detail">{{ s.detail }}</p>
+    <p class="card__note">{{ s.detail }}</p>
   </li>
   {%- endfor %}
 </ul>

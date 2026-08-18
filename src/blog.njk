@@ -1,0 +1,52 @@
+---
+layout: base.njk
+title: Notes on job hunting
+description: Short, practical posts. New ones added over time.
+---
+{#- Screen 2e. As on 2a, 2b and 2c, title and description are the design's own h1
+    and lead, used verbatim rather than written fresh.
+
+    No contactFooter here, which is what gives this page the compact dark footer
+    the design draws rather than the homepage's full contact block.
+
+    No permalink either — Eleventy maps this file to /blog/, which is what the nav
+    already points at, and what makes aria-current="page" fire in header.njk.
+
+    The mockup's two dashed "future post" cards are deliberately not here. They
+    illustrate that the list grows by itself; they are not content, and an empty
+    card is not something a visitor should be shown. -#}
+
+<div class="page-head">
+  <h1 class="page-head__title">Notes on job hunting</h1>
+  <p class="page-head__lead">Short, practical posts. New ones added over time.</p>
+</div>
+
+{#- collections.post is every file in src/posts, gathered by the tag in
+    src/posts/posts.json — so Sarah publishes by adding a file and nothing in here
+    changes. Eleventy builds a collection oldest first, hence reverse for the
+    newest-first order the design shows. Nunjucks' reverse copies the array before
+    reversing it, so this cannot disturb the collection for any other page.
+
+    A ul where the design has bare divs: this is a list of posts, and saying so
+    gets "list, N items" announced first — the same call testimonials.njk and
+    fees.njk made. -#}
+<ul class="posts">
+  {%- for post in collections.post | reverse %}
+
+  {#- The date is a <time> so it is machine-readable as well as visible. Both
+      filters read the same front matter value: postDate gives the design's
+      "12 Aug 2026", isoDate the datetime attribute a machine wants.
+
+      The link sits inside the h2 rather than wrapping the whole card, so a screen
+      reader announces it as the post title alone instead of the date, title and
+      description run together. The card is still tappable edge to edge — that is
+      the stretched ::after in pages.css. -#}
+  <li class="card post-card">
+    <time class="post-card__date" datetime="{{ post.date | isoDate }}">{{ post.date | postDate }}</time>
+    <h2 class="card__title">
+      <a class="post-card__link" href="{{ post.url }}">{{ post.data.title }}</a>
+    </h2>
+    <p class="card__note">{{ post.data.description }}</p>
+  </li>
+  {%- endfor %}
+</ul>
