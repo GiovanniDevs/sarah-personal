@@ -8,8 +8,10 @@
    here, with the design's figure noted, because tokens.css says of itself that it
    holds no layout and no components.
 
-   Mobile-first with no breakpoints: the approved design is six mobile screens and
-   specifies nothing wider. Breakpoints get added upward when a wide design exists. */
+   Mobile-first, with one breakpoint: min-width 680px, which lays the header nav out
+   horizontally. The approved design is six mobile screens and specifies nothing wider,
+   so that number is measured from the content rather than taken from a design — the
+   working is in the "Header, wide" section. Nothing else in the site has a breakpoint. */
 
 
 /* ---------- Document ---------- */
@@ -174,6 +176,86 @@ body {
 
 .site-nav__list a[aria-current="page"] {
   font-weight: var(--weight-semibold);
+}
+
+
+/* ---------- Header, wide ---------- */
+
+/* 680px is measured, not a device name. It is the narrowest width that fits the brand
+   and all six labels on one line with the brand still clear of the first item:
+
+     20 + 20  header padding
+     130.08   the brand, as rendered (30px mark + 9px gap + "Sarah Philip" in Marcellus)
+     26       the least space we will leave between brand and nav
+     350.57   the six labels at 15px Source Sans 3 — worst case, see below
+     100      five 20px gaps between them
+     = 646.65
+
+   Two things push it past that figure. One label is always semibold, because the current
+   page carries aria-current; on /book/ that widens the longest label, which is where
+   350.57 comes from rather than 347.33. And fonts.css sets font-display: swap, so the
+   labels first paint in system-ui — the same six come to 366.66 there, and 380.98 in the
+   generic sans-serif a browser without system-ui falls back to. Breaking at 647 would
+   wrap the nav for the length of every cold load and then snap it back, so the number
+   clears the widest fallback instead: 677.06, rounded up.
+
+   Re-measure if a label's text changes. "Book a consultation" is the one carrying it. */
+@media (min-width: 680px) {
+
+  /* The row is the header, not the bar. The nav is a sibling of .site-header__bar on
+     purpose — that is what lets the panel span the full width below it on a phone — so
+     rather than move it in the markup and put that panel at risk, the header becomes the
+     flex row and the bar hands its padding upwards. The bar is then a content-sized flex
+     item holding nothing but the brand. space-between pushes the two apart; the gap is
+     the floor that stops them meeting, and it is the 26 in the sum above. */
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-26);
+    padding: var(--space-14) var(--space-20);
+  }
+
+  .site-header__bar {
+    padding: 0;
+  }
+
+  /* Same specificity as the .js .menu-toggle rule that reveals it, further down the file,
+     so it wins on source order. That is what keeps this a min-width query — matching the
+     specificity rather than out-running it is what makes mobile-first possible here. */
+  .js .menu-toggle {
+    display: none;
+  }
+
+  /* Above this width the nav is visible whatever aria-expanded says, and the two rules
+     that could argue about it cannot.
+
+     The open-state rule up there scores (0,5,0) — :has() takes the specificity of its
+     argument — against (0,2,0) for `.js .site-nav`. A media query adds nothing to
+     specificity, so restating only the plain selector would quietly lose. Two things
+     prevent that. Both selectors are repeated here, so this block wins on source order at
+     equal specificity. And the value is block, exactly what the open-state rule sets, so
+     even if one of them were changed the answer would come out the same. The horizontal
+     layout is applied one level down on the list, where nothing else touches display. */
+  .js .site-nav,
+  .js .site-header:has(.menu-toggle[aria-expanded="true"]) .site-nav {
+    display: block;
+  }
+
+  .site-nav__list {
+    display: flex;
+    gap: var(--space-20);
+  }
+
+  /* No order, no row-reverse anywhere above: visual order is DOM order, so tab order needs
+     no correcting. The border-top was the panel's separator and has nothing to separate in
+     a row. The focus ring from :focus-visible is 2px at 2px offset — 4px each side, well
+     inside the 20px gap, so neighbouring rings never touch. */
+  .site-nav__list a {
+    padding: var(--space-6) 0;
+    border-top: 0;
+  }
+
 }
 
 
