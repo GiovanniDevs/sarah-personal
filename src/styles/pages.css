@@ -519,3 +519,211 @@
   position: absolute;
   inset: 0;
 }
+
+
+/* ---------- 2f Blog post ---------- */
+
+/* The block above the article: back link, date, title. Its own class rather than
+   the .page-head that 2b, 2c and 2e share — this one has three children where that
+   has two, a 10px gap where that has 8, and it ends at 10 where that ends at 8.
+   Three differences make it a different component, not a variant. */
+.post-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--space-26) var(--space-24) var(--space-10);
+}
+
+/* Undecorated, as drawn. The arrow is part of the link text in post.njk, so
+   there is nothing to draw here. */
+.post-head__back {
+  color: var(--color-text-accent);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+/* The same three declarations as .post-card__date on 2e — the design gives the
+   date on both screens identical treatment. Left as its own rule rather than
+   shared: the two live in unrelated blocks, and one class spanning both would tie
+   the index card's styling to the post header's for no gain. */
+.post-head__meta {
+  color: var(--color-text-accent);
+  font-size: var(--text-eyebrow);
+  font-weight: var(--weight-semibold);
+}
+
+/* 26px, one step below the 28px every other h1 uses: a post title is longer than a
+   page name, so the design sizes it down and gives it a line-height to wrap on.
+   text-wrap: pretty is the design's, as on .hero__title. */
+.post-head__title {
+  margin: 0;
+  color: var(--color-text-heading);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-title-post);
+  line-height: var(--leading-title);
+  text-wrap: pretty;
+}
+
+/* Sarah's Markdown lands here. Everything from this rule to the blockquote below
+   is selected by tag name and scoped under .post-body, because markdown-it writes
+   plain elements with no classes on them — the one place on the site where a class
+   cannot be put in the markup. Nothing outside this block is reached. */
+.post-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  padding: var(--space-4) var(--space-24) var(--space-10);
+}
+
+/* That 14px gap is the design's only vertical rhythm — a heading gets exactly the
+   same space above it as a paragraph does — so every element's own margin has to
+   go. A blanket reset rather than one rule per tag: there is no class to hang
+   those on, and the list of tags Sarah might type is open-ended. */
+.post-body > * {
+  margin: 0;
+}
+
+/* 15.5px on 1.65, the long-form setting --text-prose is named for. No colour: the
+   design's body copy is --color-text-body, which base.css already sets on body. */
+.post-body p {
+  font-size: var(--text-prose);
+  line-height: var(--leading-prose);
+}
+
+/* Marcellus at 400, as everywhere. The h2 is the design's, at 20px. The h3 is not
+   drawn anywhere and is derived: 17px continues the 26 → 20 descent using the
+   smallest size the design ever sets in this face. 18px was the alternative and
+   was skipped — it sits only 2px under the h2, too small a gap to tell two heading
+   levels apart, and it is already 2e's card title. */
+.post-body h2,
+.post-body h3 {
+  color: var(--color-text-heading);
+  font-family: var(--font-heading);
+  font-weight: var(--weight-regular);
+}
+
+.post-body h2 {
+  font-size: var(--text-subhead);
+}
+
+.post-body h3 {
+  font-size: var(--text-item-lead);
+}
+
+/* The only link on the site that keeps its underline. Every other anchor sets
+   text-decoration: none; the design deliberately leaves this one marked, because
+   inside a wall of prose colour and weight alone are not enough to find it. */
+.post-body a {
+  color: var(--color-link);
+  font-weight: var(--weight-semibold);
+}
+
+/* Not drawn — the design is six mobile screens, where hover barely applies.
+   --color-link-hover is in tokens.css for exactly this and has no other caller. */
+.post-body a:hover {
+  color: var(--color-link-hover);
+}
+
+/* Semibold, not bold. 600 is the weight the design gives its one piece of inline
+   emphasis, the body link above; 700 it keeps for the uppercase eyebrows, the
+   badge, the prices and the footer button. Colour inherits, so a bold word stays
+   body-coloured and cannot be misread as a link.
+
+   There is deliberately no rule for em. The italic cut is loaded in fonts.css and
+   the browser's default already inherits the right size, leading and colour, so a
+   rule here would only restate it. */
+.post-body strong {
+  font-weight: var(--weight-semibold);
+}
+
+/* Lists are undesigned — the design has no prose list on any screen, and every
+   other list on the site is list-style: none. So this is derived: markers left on,
+   the browser's 40px indent cut to the 20px the design uses wherever it insets
+   something, and items set to read exactly like a paragraph.
+
+   Spaced with a margin rather than a flex gap on the ul: making a list a flex
+   container blockifies its items, and the markers go with them. */
+.post-body ul,
+.post-body ol {
+  padding-left: var(--space-20);
+}
+
+.post-body li {
+  font-size: var(--text-prose);
+  line-height: var(--leading-prose);
+}
+
+.post-body li + li {
+  margin-top: var(--space-6);
+}
+
+/* The one purely aesthetic call in this section. --color-text-accent is what the
+   design uses for every small non-body accent — the date above, the back link, the
+   eyebrows — so the markers join that family rather than sitting at full body
+   weight. Delete this rule and they inherit the body colour; nothing else changes. */
+.post-body li::marker {
+  color: var(--color-text-accent);
+}
+
+/* The grey pulled-out block. The design draws it as a plain div; Markdown gives a
+   blockquote wrapping a paragraph, which is the more accurate element anyway.
+   Radius 10, not the 12 the cards use — the design distinguishes the two, which is
+   why tokens.css names --radius-quote separately. */
+.post-body blockquote {
+  padding: var(--space-14) var(--space-18);
+  border-radius: var(--radius-quote);
+  background: var(--color-surface-quiet);
+}
+
+/* The quote itself: a little smaller and tighter than the surrounding prose,
+   italic, in the darker text the design uses on grey grounds — the same treatment
+   .teaser__quote gets on 2a. The margin reset is repeated here because the blanket
+   one above only reaches direct children of .post-body. */
+.post-body blockquote p {
+  margin: 0;
+  color: var(--color-text-on-quiet);
+  font-size: var(--text-body);
+  font-style: italic;
+  line-height: var(--leading-body);
+}
+
+/* The periwinkle block that closes every post. Margin rather than padding, so the
+   colour stops short of the screen edge — the same reason .teaser uses one. */
+.post-cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  margin: var(--space-14) var(--space-20) var(--space-26);
+  padding: var(--space-20);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-accent);
+}
+
+/* A p in the markup rather than a heading, so it stays out of the document
+   outline; the heading face is all that carries over from the design. */
+.post-cta__heading {
+  margin: 0;
+  color: var(--color-text-heading);
+  font-family: var(--font-heading);
+  font-size: var(--text-item-lead);
+}
+
+/* The third button in the set, and the only one on a periwinkle ground: dark teal,
+   where .button above is navy and .site-footer__button is periwinkle on the dark
+   footer. Scoped to this block rather than made a variant of .button — it differs
+   in ground, size and padding, which leaves only the radius shared.
+
+   No display: block. It is a flex item of .post-cta, so it already fills the
+   width, which is the same reason .site-footer__button does without one. */
+.post-cta__button {
+  padding: var(--space-13) var(--space-20);
+  border-radius: var(--radius-button);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-on-inverse);
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  text-align: center;
+  text-decoration: none;
+}

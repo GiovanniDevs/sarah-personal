@@ -1,0 +1,40 @@
+---
+layout: base.njk
+---
+
+{#- Screen 2f, the page every blog post is drawn on. Sarah never opens this file:
+    she writes a Markdown file in src/posts, and Eleventy pours it into the content
+    slot below. posts.json points every file in that folder here.
+
+    layout: base.njk, so the header, the dark footer and the four stylesheets come
+    from the same shell every other page uses. No contactFooter, which is what
+    gives a post the compact footer the design draws rather than the homepage's
+    full contact block.
+
+    Only two of the post's three front matter fields are read here. description
+    never appears on the page — base.njk puts it in the meta tag, and blog.njk
+uses it as the card excerpt on 2e. -#}
+<div class="post-head">
+    <a class="post-head__back" href="/blog/">← All posts</a>
+    {#- The same two filters in the same order as the card on 2e, so the date on the
+      index and the date on the post cannot drift apart: postDate gives the
+      design's "12 Aug 2026", isoDate the datetime attribute a machine reads.
+
+       -#}
+    <time class="post-head__meta" datetime="{{ page.date | isoDate }}">{{ page.date | postDate }}</time>
+    <h1 class="post-head__title">{{ title }}</h1>
+</div>
+{#- Sarah's Markdown, untouched. Everything inside is styled by tag name in
+    pages.css: markdown-it emits plain p, h2, ul and blockquote with no classes
+    on them, so this is the one block on the site with nothing to hook onto. -#}
+<div class="post-body">{{ content | safe }}</div>
+{#- The periwinkle block the design closes 2f with. A p rather than a heading:
+    it is a line of marketing copy, and an h2 here would sit in the document
+    outline among Sarah's real subheadings and be read as part of her article.
+
+    /book/, like every "Book a consultation" on the site. The email address lives
+    on that page alone, so when Sarah's arrives only book.njk changes. -#}
+<div class="post-cta">
+    <p class="post-cta__heading">Want a second pair of eyes on your CV?</p>
+    <a class="post-cta__button" href="/book/">Book a consultation</a>
+</div>

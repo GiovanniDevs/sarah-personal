@@ -1,4 +1,8 @@
 ---
+# Sarah — please keep this post. It is your template.
+# Every new post starts life as a copy of this file, so if this one is ever
+# deleted there is nothing left to copy from. Leave it where it is.
+#
 # Three fields, and only these three. To publish a new post, duplicate this file,
 # rename it (the filename becomes the web address — lowercase, hyphens, no spaces),
 # then change the three values below and write the post underneath.
@@ -15,5 +19,21 @@ Body copy placeholder — this page is generated from a Markdown file Sarah comm
 ## A subheading looks like this
 
 More placeholder body copy, with an [inline link](/book/) styled in the palette.
+
+### A smaller subheading sits below it
+
+Words can be **bold** for emphasis, or *italic* for a lighter stress.
+
+A bulleted list looks like this:
+
+- First point
+- Second point
+- Third point
+
+And a numbered list, for steps that happen in order:
+
+1. First step
+2. Second step
+3. Third step
 
 > A pulled-out tip or quote sits in a quiet grey block.
