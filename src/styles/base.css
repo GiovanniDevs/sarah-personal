@@ -24,6 +24,21 @@
   box-sizing: border-box;
 }
 
+/* The last three properties are the sticky footer: on a page with too little content
+   the dark band used to stop half way down the window, with bare surface below it.
+
+   min-height gives the page a floor of one windowful even when its content is shorter;
+   the column then hands the leftover height to <main> in the rule below, which pushes
+   the footer to the bottom. A page taller than the window has no leftover height, so
+   nothing about it changes.
+
+   min-height twice on purpose. dvh is the height actually visible right now, which is
+   what puts the footer at the bottom of a phone screen rather than behind the address
+   bar — vh is measured against the taller viewport with the bar hidden. A browser too
+   old to understand dvh drops that line as invalid and keeps the vh above it.
+
+   The three flex items are the header, <main> and the footer. The <script> at the end
+   of base.njk is display: none by default and never becomes one. */
 body {
   margin: 0;
   background: var(--color-surface);
@@ -31,6 +46,18 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-body);
   line-height: var(--leading-body);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Grow into whatever height is left over, never shrink, start from content height.
+   <main> has no background, so the extra height is invisible — it only moves the
+   footer down. This is the one property <main> has anywhere; its width is still
+   nobody's business but the sections inside it, as pages.css describes. */
+main {
+  flex: 1 0 auto;
 }
 
 
