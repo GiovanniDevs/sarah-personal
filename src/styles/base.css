@@ -11,7 +11,9 @@
    Mobile-first, with one breakpoint: min-width 680px, which lays the header nav out
    horizontally. The approved design is six mobile screens and specifies nothing wider,
    so that number is measured from the content rather than taken from a design — the
-   working is in the "Header, wide" section. Nothing else in the site has a breakpoint. */
+   working is in the "Header, wide" section. The footer reuses the same 680 to grow its
+   vertical padding; it has no content threshold of its own to measure, and one
+   breakpoint value for the site beats two. Nothing else has a breakpoint. */
 
 
 /* ---------- Document ---------- */
@@ -261,10 +263,25 @@ body {
 
 /* ---------- Footer ---------- */
 
-/* Screens 2b-2f: email and copyright on the dark ground. */
+/* Screens 2b-2f: email and copyright on the dark ground.
+
+   The dark band spans the viewport; its contents do not. A grid of one centred track
+   is what separates those two, and it does it without a wrapper element — the band is
+   the padding box, the track is the column inside it. A flex column could not: capping
+   it would cap the background with it.
+
+   min(--width-prose, 100%) is the same idiom .teaser and .book-panel use in pages.css.
+   The 100% is the padded content box, so at 390px the track is min(500, 342) = 342 and
+   the phone renders exactly as drawn; the cap only starts doing anything above 548.
+   Children stretch to the track by default, so the stack stays left-aligned throughout.
+
+   --width-prose and not --width-content: the contents here are prose — a heading, an
+   intro line, an email — so the column lines up with .hero and .about above it rather
+   than with the card grids. */
 .site-footer {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: min(var(--width-prose), 100%);
+  justify-content: center;
   gap: var(--space-4);
   padding: var(--space-18) var(--space-24);
   background: var(--color-surface-inverse);
@@ -315,7 +332,17 @@ body {
   line-height: var(--leading-compact);
 }
 
+/* 350px and width: 100% for the reasons already written out for .button in pages.css
+   (see the comment above it) — 350 is the design's 390px screen less its gutters, so
+   below that width the cap does nothing and the button is full width as drawn.
+
+   No margin-inline: auto, which is where this parts company with .button. That one
+   centres because it sits inside a centred prose block on white. This one is a grid
+   item in the footer's left-aligned stack, so its left edge belongs under the heading,
+   intro and email rather than in the middle of the column. */
 .site-footer__button {
+  width: 100%;
+  max-width: 350px;
   margin-top: var(--space-4);
   padding: var(--space-13) var(--space-20);
   border-radius: var(--radius-button);
@@ -329,4 +356,39 @@ body {
 
 .site-footer--contact .site-footer__legal {
   margin-top: var(--space-8);
+}
+
+
+/* ---------- Footer, wide ---------- */
+
+/* Padding only. The column above has already reached its 500px cap by 548px, well
+   below this query, so nothing here fights it and nothing reflows as the line is
+   crossed — the band simply gets taller.
+
+   It needs to. The compact footer's contents are a 14px email and a 12px copyright,
+   about 40px in total; at 18px padding the band is a 76px strip across the bottom of a
+   1440px screen rather than a band. Both variants double — 18 to 40, 24 to 48 — which
+   keeps the difference the design draws between them.
+
+   calc() over a spacing token rather than a new token: tokens.css stops at --space-26
+   and holds no layout, and .teaser in pages.css already multiplies a space token this
+   way. The horizontal 24 is restated unchanged so each of these is a whole shorthand;
+   the gutter on a phone is not what is being fixed here.
+
+   680 is the header's number, reused. Unlike the header the footer has nothing to
+   measure — no content overflows, the band is just too thin — so this borrows the one
+   breakpoint the site already has instead of introducing a second.
+
+   A second min-width: 680px block, and not merged into the header's, because that one
+   sits above the footer's own rules and these have to come after what they override. */
+@media (min-width: 680px) {
+
+  .site-footer {
+    padding: calc(var(--space-20) * 2) var(--space-24);
+  }
+
+  .site-footer--contact {
+    padding: calc(var(--space-24) * 2) var(--space-24);
+  }
+
 }

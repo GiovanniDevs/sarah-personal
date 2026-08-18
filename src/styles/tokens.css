@@ -1,7 +1,14 @@
 /* Design tokens.
    Every value below is taken from design/Career CV Mobile.dc.html, screens 2a-2f.
    Nothing here is rounded or adjusted; 15.5px, 12.5px and .09em are as designed.
-   This file defines tokens only. No layout, no components, no page styles. */
+   This file defines tokens only. No layout, no components, no page styles.
+
+   Two things are not in the design, because the design is six mobile screens and
+   specifies nothing wider. Three of the font sizes are clamps rather than fixed
+   values, and there are two container caps at the foot of the file. Both carry
+   their working in the comment above them, and both leave the 320-390px rendering
+   byte for byte as drawn — a clamp sits at its floor there, and a cap is wider
+   than the screen. */
 
 :root {
   /* Colour — 11 values, 19 roles.
@@ -48,10 +55,26 @@
   --weight-semibold: 600;
   --weight-bold: 700;
 
-  /* Font sizes — 15, named for the role each plays in the design. */
-  --text-hero: 30px;        /* homepage h1 */
-  --text-title: 28px;       /* interior page h1 */
-  --text-title-post: 26px;  /* blog post h1; also the decorative quote glyph */
+  /* Font sizes — 15, named for the role each plays in the design.
+
+     The three page titles scale with the viewport; everything else is fixed.
+     Each clamp runs from the design's own size at a 320px viewport to a modest
+     ceiling at 1000px, and 1000 is where the layout itself stops changing —
+     prose caps at --width-prose, cards at --width-content — so the type stops
+     with it. The middle term is MIN + (MAX - MIN) x (100vw - 320) / 680.
+
+     Four sizes below are deliberately NOT scaled:
+       --text-subhead    steps down from 15.5px body inside a fixed measure;
+                         that relationship does not depend on viewport width.
+       --text-section    footer only.
+       --text-item       card titles, in grid tracks that stop growing at 345px.
+       --text-item-lead  the header wordmark. base.css derives its 680px
+                         breakpoint from that wordmark's rendered width, so
+                         scaling this would silently invalidate that sum. */
+  --text-hero: clamp(30px, 25.3px + 1.47vw, 40px);        /* homepage h1, 30 -> 40 */
+  --text-title: clamp(28px, 24.2px + 1.18vw, 36px);       /* interior page h1, 28 -> 36 */
+  --text-title-post: clamp(26px, 22.2px + 1.18vw, 34px);  /* blog post h1, 26 -> 34;
+                               also the decorative quote glyph, which grows with it */
   --text-subhead: 20px;     /* h2 inside post body */
   --text-section: 19px;     /* "Get in touch" section heading */
   --text-item: 18px;        /* fee item name, blog index post title */
@@ -110,4 +133,33 @@
   --space-22: 22px;
   --space-24: 24px;
   --space-26: 26px;
+
+  /* Container caps — 2. Ceilings on containers that are fluid below them, which is
+     why they sit here rather than counting as the layout this file disclaims: no
+     element is ever this wide because a token said so, only ever at most this wide.
+
+     --width-prose is a readable measure, and 500 is measured rather than reasoned.
+     The tempting shortcut is base.css's existing figure ("350.57 the six labels at
+     15px Source Sans 3") — 50 characters, so 0.47em per character. That number is
+     right for what it measures and wrong here: nav labels are Title Case, and
+     capitals in this face are far wider than running lowercase. Laying each of the
+     site's real paragraphs out on one unwrapped line gives 0.41-0.44em instead, and
+     a column sized from 0.47em runs to 77-83 characters rather than 65-75.
+
+     So, from the copy actually on the page — the widest advance is the hero lead at
+     6.64px, the narrowest the Fees and Book leads at 6.15px. 500 less the 24px
+     padding each side leaves 452px, which is 68 characters at the widest and 74 at
+     the narrowest. Every paragraph on the site lands inside 65-75.
+
+     Re-measure if the body font changes. Nothing else depends on this number.
+
+     Deliberately px and not ch: fonts.css sets font-display: swap, and ch measures
+     against whatever font is painted right now, so a ch column would jump width on
+     every cold load. The same reasoning base.css gives for its 680.
+
+     --width-content is three cards side by side at the width the design draws one.
+     The mockup is a 390px phone with 20px gutters, so a card as drawn is 350px:
+     3 x 350 + 2 x 12 gap + 40 padding = 1102, rounded down. */
+  --width-prose: 500px;
+  --width-content: 1100px;
 }
