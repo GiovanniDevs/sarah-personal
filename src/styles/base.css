@@ -30,6 +30,42 @@ body {
 }
 
 
+/* ---------- Focus ---------- */
+
+/* The one focus rule for the whole site. Nothing here removes an outline; this
+   replaces the browser's default, which is all the site had until now and which
+   differs per browser.
+
+   :focus-visible and not :focus — the browser decides when the ring is wanted, so
+   a mouse click on a button does not leave one behind while a Tab press does.
+
+   outline and outline-offset are the two properties that draw outside the box
+   without taking space, so no layout moves. --color-border-emphasis is the purple
+   already drawing the featured fee card's border: 5.46:1 on white, and no new token.
+
+   Undeclared here on purpose: any focus style for the menu panel's links. They sit
+   on white and inherit this rule, which is all they need. */
+:focus-visible {
+  outline: 2px solid var(--color-border-emphasis);
+  outline-offset: 2px;
+}
+
+/* The four controls on a dark or saturated ground, where the purple above is too
+   close to what it sits on to be found. White is the one colour that reads on all
+   three grounds these use — navy, dark teal and periwinkle.
+
+   .button and .post-cta__button are styled in pages.css, not here. The selectors
+   live in this block anyway so that all four exceptions are visible in one place;
+   split across two files, the next person to add a dark-ground control would have
+   no single list to add to. */
+.button:focus-visible,
+.site-footer__email:focus-visible,
+.site-footer__button:focus-visible,
+.post-cta__button:focus-visible {
+  outline-color: var(--color-text-on-inverse);
+}
+
+
 /* ---------- Header ---------- */
 
 /* The border sits on the header rather than the bar, so when the menu is open the

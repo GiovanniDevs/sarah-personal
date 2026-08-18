@@ -10,10 +10,27 @@
     It must stay inline and stay here; an external file would arrive too late. -#}
 <script>document.documentElement.className += " js";</script>
 
-{#- Whole title from front matter, no "Page · Sarah Philip" suffix. A separator
-    convention invented here would bind every page that follows it. -#}
-<title>{{ title }}</title>
-<meta name="description" content="{{ description }}">
+{#- The page's name, then the site's: "Fees · Sarah Philip". A search result shows the
+    title with no surrounding context, so every page has to name the practice — "Fees"
+    on its own identifies no business, no person and no country.
+
+    site.name comes from src/_data/site.json, which Eleventy reads with no config of its
+    own. The name is in a file rather than typed here because the briefing still lists
+    the final site name as Sarah's to decide; when she does, it is one edit there.
+    (header.njk and footer.njk still hold their own copies of the name — switching those
+    over is a separate job, not this one.)
+
+    metaTitle wins outright when a page sets one, for a page whose h1 does not work as a
+    title. Only index.njk sets it, and Sarah never does: a post keeps the same three
+    front matter fields it always had and picks up the suffix on its own. -#}
+<title>{% if metaTitle %}{{ metaTitle }}{% else %}{{ title }} · {{ site.name }}{% endif %}</title>
+
+{#- Wrapped, so a page with no description gets no tag rather than an empty one.
+    Sarah publishes by editing front matter in GitHub's web editor; deleting the
+    description line is a one-keystroke mistake, and content="" is a worse thing to
+    ship than a missing tag — a search engine reads it as a description that is
+    deliberately blank. -#}
+{% if description %}<meta name="description" content="{{ description }}">{% endif %}
 
 {#- fonts before tokens before base: @font-face, then the values, then the uses. -#}
 <link rel="stylesheet" href="/styles/fonts.css">
