@@ -11,17 +11,76 @@
    the design's screen IDs. A style earns a place in Components once it has more
    than one caller; until then it stays with the page that asked for it.
 
-   Mobile-first with no breakpoints, as in base.css. */
+   Mobile-first with one breakpoint — see Layout below. */
+
+
+/* ---------- Layout ---------- */
+
+/* How this page widens, in one place. Nothing in this section is a rule; it is the
+   reasoning behind the max-widths and the one media query scattered through the file.
+
+   <main> is deliberately left unstyled and full width. Every section constrains
+   itself instead. That is what makes the homepage hero full-bleed for free — it is
+   already the width of the viewport, so it needs nothing but its own padding removed
+   — and it is why there is no 100vw anywhere in this file.
+
+   100vw would be the wrong tool here, on Windows in particular. Chrome, Edge and
+   Firefox on Windows draw a classic scrollbar that takes ~15-17px of layout space,
+   but 100vw is defined against the viewport including that gutter. Every page on
+   this site scrolls vertically, so anything at width: 100vw would be 15-17px wider
+   than its containing block and would produce a horizontal scrollbar. The usual
+   patches — calc(100vw - (100vw - 100%)), margin-left: calc(50% - 50vw), or
+   overflow-x: hidden on body — either restate that bug or hide it. Not constraining
+   the parent means nothing has to break out of it, so the question never arises.
+
+   Two widths, both in tokens.css with their arithmetic:
+
+     --width-prose (500px)     the reading column. Everything that is a paragraph
+                               someone reads left to right: the hero, About, both
+                               page heads, the post body, the coloured blocks.
+     --width-content (1100px)  the three card lists, which are grids.
+
+   The card grids use auto-fill and minmax and no media query, so the column count
+   is decided by the space available rather than by a list of device widths. The
+   min() inside minmax is load-bearing — see the note on .fees.
+
+   The one media query is at the foot of the 2a section: 680px, for the hero going
+   edge to edge. It is not a new number. base.css measured 680 for the header nav,
+   with the working shown there, and reusing it means the site has one breakpoint
+   value rather than two, and that the header and the hero change character at the
+   same moment. It is a literal because var() is not valid inside a media query.
+
+   Heading sizes scale with the viewport; body sizes do not. Both live in tokens.css,
+   which is also where the list of headings that deliberately do not scale is kept. */
 
 
 /* ---------- Components ---------- */
 
 /* The primary booking button. Screen 2a's hero; the design repeats it on 2b, 2c
-   and 2f. Not to be confused with .site-footer__button in base.css — that one is
-   the periwinkle variant that only appears on the dark ground. */
+   and 2f.
+
+   350px is the width the design draws it at: the 390px mockup less its 20px
+   gutters. display: block would otherwise fill whatever it sits in, which inside
+   the 500px reading column is a 452px navy bar. So at 390 and below this cap does
+   nothing at all and the button is full width exactly as drawn; above it the
+   button stops growing and the auto margins centre it.
+
+   The one judgement here the design does not itself state — it draws a phone, and
+   a phone-width button is ambiguous between "full width" and "350px".
+
+   width: 100% is not redundant, which is the non-obvious part. Every block this
+   button sits in is a flex column or a grid, so it is always a flex or grid item,
+   and an item with an auto margin across the container's axis is explicitly not
+   stretched — the auto margin eats the free space instead. Without a width the
+   button therefore shrinks to the length of its label: 176px, centred, which is
+   not the design on any screen. Stating the width makes the size definite, max-width
+   caps it, and the auto margins centre what is left over. */
 .button {
   display: block;
+  width: 100%;
+  max-width: 350px;
   margin-top: var(--space-6);
+  margin-inline: auto;
   padding: var(--space-15) var(--space-20);
   border-radius: var(--radius-button);
   background: var(--color-action);
@@ -51,6 +110,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
+  max-width: var(--width-prose);
+  margin-inline: auto;
   padding: var(--space-26) var(--space-24) var(--space-8);
 }
 
@@ -143,6 +204,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-12);
+  max-width: var(--width-prose);
+  margin-inline: auto;
   padding: var(--space-24) var(--space-24) var(--space-8);
 }
 
@@ -173,6 +236,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-10);
+  max-width: var(--width-prose);
+  margin-inline: auto;
   padding: var(--space-24) var(--space-24) 0;
 }
 
@@ -184,12 +249,25 @@
 /* The testimonial teaser. Margin rather than padding, so the card's grey ground
    stops short of the screen edge. No bottom margin: the contact section below
    carries the gap, which is why .site-footer--contact has a top margin and no
-   other footer does. */
+   other footer does.
+
+   The min() in the max-width is the idiom every margin-carrying block on this site
+   uses — .book-panel on 2d and .post-cta on 2f are the other two. The problem it
+   solves: this block needs a 20px gap either side on a phone, which is what the
+   side margin was for, and needs to centre in the reading column on a wide screen,
+   which auto margins do — but auto margins would overwrite the 20px and let the
+   grey run to the screen edge. min() picks whichever is smaller at the width you
+   are at. Below 540px that is 100% less the two 20px gaps, so the ground stops
+   short exactly as before; above it, --width-prose, and the auto margins centre it.
+
+   No breakpoint, and one declaration doing both jobs rather than a query flipping
+   between them. */
 .teaser {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  margin: var(--space-24) var(--space-20) 0;
+  max-width: min(var(--width-prose), calc(100% - var(--space-20) * 2));
+  margin: var(--space-24) auto 0;
   padding: var(--space-18) var(--space-20);
   border-radius: var(--radius-card);
   background: var(--color-surface-quiet);
@@ -216,15 +294,66 @@
 }
 
 
+/* ---------- 2a Home, wide ---------- */
+
+/* The hero image goes edge to edge; everything below it stays in the reading
+   column it already has.
+
+   The whole of the mechanism is these two declarations. .hero-media is a direct
+   child of <main>, which has no width of its own, so this frame is already exactly
+   as wide as the viewport — removing its padding is the entire full-bleed. There
+   is no breakout, no negative margin and no 100vw, which is why there is no
+   scrollbar to compensate for. The reasoning in full is under Layout at the top.
+
+   680px is base.css's number, not a second one. See Layout.
+
+   The placeholder's 240px height is deliberately left alone, so this band is much
+   shallower in proportion here than the mockup draws it. It is Sarah's photo slot:
+   until there is a photo, there is no aspect ratio to design to, and picking one
+   now would be choosing a crop for an image nobody has seen. Revisit when it
+   arrives — this is the rule to change, and it is the only one. */
+@media (min-width: 680px) {
+
+  .hero-media {
+    padding: 0;
+  }
+
+  /* Nothing to round off against, once the frame reaches the screen edges. */
+  .hero-media__placeholder {
+    border-radius: 0;
+  }
+
+}
+
+
 /* ---------- 2b Testimonials ---------- */
 
 /* The card list. Holds the booking button as its last child, as the design does,
-   which is what the note on .testimonial's banding below is about. */
+   which is what the note on .testimonial's banding below is about.
+
+   A grid rather than a flex column, so the cards reflow into two and then three
+   columns as the space appears. The template is the same one .fees and .posts use
+   and the note explaining it is on .fees; the only difference here is the 14px gap,
+   which is what the design gives this screen.
+
+   One thing a grid gives free that the flex column did not: cards in a row stretch
+   to the tallest of them, so a long testimonial beside a short one no longer leaves
+   a ragged bottom edge. .testimonial's min-height still sets the floor. */
 .testimonials {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: var(--space-14);
+  max-width: var(--width-content);
+  margin-inline: auto;
   padding: var(--space-18) var(--space-20) var(--space-26);
+}
+
+/* The button is a child of the list, so in a grid it became a grid item and would
+   sit in a column next to a card. This puts it back on a row of its own, spanning
+   however many columns there are. It keeps the 350px cap and the auto margins from
+   .button in Components, so it centres on that row. */
+.testimonials .button {
+  grid-column: 1 / -1;
 }
 
 /* One card. margin: 0 resets the browser's blockquote indent, so the flex gap
@@ -280,9 +409,15 @@
    The periwinkle card changes more than its background — on the darker ground
    the glyph and the attribution go from purple to navy for contrast.
 
-   The one thing to know: nth-child counts every child of .testimonials, and the
-   booking button is one of them. It is last, so it changes nothing. A card added
-   after it would be coloured as though the button were a card. */
+   Two things to know. nth-child counts every child of .testimonials, and the
+   booking button is one of them. It is last, so it changes nothing; a card added
+   after it would be coloured as though the button were a card.
+
+   And nth-child counts document order, not position on screen, so once the list is
+   in columns the banding is read across the row and then wraps. Three cards in
+   three columns give grey, periwinkle, grey along one row, as drawn. In two columns
+   they fall as a checkerboard, which still alternates and still reads as deliberate.
+   Nothing to fix here, but it is the reason 768px looks different from 1024px. */
 .testimonial:nth-child(even) {
   background: var(--color-surface-accent);
 }
@@ -300,12 +435,39 @@
 
    Unlike .testimonials above, the button is not a child of this list: on 2c the
    design puts it in a block of its own with the closing note, which is what
-   .fee-cta at the bottom of this section is. */
+   .fee-cta at the bottom of this section is.
+
+   A grid rather than a flex column, and the grid template all three card lists on
+   the site share — .testimonials on 2b and .posts on 2e are the other two. Read it
+   from the inside out:
+
+     min(300px, 100%)   the narrowest a card may be. 300px because a card that wide
+                        has 260px of content, and "Career coaching session" at 18px
+                        Marcellus (~207px) plus a real price (~40px) still fits on
+                        one .fee__row line. The min() is load-bearing and not
+                        decoration: a bare minmax(300px, 1fr) honours its floor even
+                        when the container is narrower than it, so at a 320px
+                        viewport — where this list is 280px wide — it would overflow
+                        the screen. min(…, 100%) lowers the floor to the container
+                        and the grid drops cleanly to one column instead.
+     minmax(…, 1fr)     past that floor the cards share the space equally.
+     auto-fill          as many columns as fit. auto-fill and not auto-fit: the two
+                        differ only when a list holds fewer cards than there are
+                        columns, and then auto-fit collapses the empty tracks and
+                        stretches what is left. On 2e that would make a blog with one
+                        post render a single card the full width of the page. Fees
+                        always has three so it is moot here, but the three lists are
+                        deliberately identical.
+
+   The result is 1 column to about 650px, 2 to about 965, then 3 up to the cap. No
+   media query anywhere in it: the column count follows the space available rather
+   than a list of device widths, so it stays right if a card's copy changes. */
 .fees {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: var(--space-12);
-  margin: 0;
+  max-width: var(--width-content);
+  margin: 0 auto;
   padding: var(--space-18) var(--space-20) var(--space-8);
   list-style: none;
 }
@@ -365,11 +527,16 @@
   font-weight: var(--weight-bold);
 }
 
-/* The button and the closing line. */
+/* The button and the closing line. Constrained to the reading column and not to
+   --width-content: what it holds is a button that caps at 350 and one line of
+   centred prose, so the wider cap would change nothing but the measure of that
+   line. Both are centred, so it sits under the middle of the card grid either way. */
 .fee-cta {
   display: flex;
   flex-direction: column;
   gap: var(--space-10);
+  max-width: var(--width-prose);
+  margin-inline: auto;
   padding: var(--space-14) var(--space-24) var(--space-26);
 }
 
@@ -398,12 +565,17 @@
    The design's margin is 16px 20px 0, its zero bottom relying on the "Prefer
    email?" block below to carry the gap to the footer. That block is gone — see
    book.njk — so the bottom is 26, which is the gutter 2b and 2c already leave
-   between their last content and the dark footer. */
+   between their last content and the dark footer.
+
+   max-width uses the min() idiom, so the grey ground keeps its 20px gap either side
+   on a phone and centres in the reading column above that. Written out in full on
+   .teaser, which was the first of the three blocks to need it. */
 .book-panel {
   display: flex;
   flex-direction: column;
   gap: var(--space-14);
-  margin: var(--space-16) var(--space-20) var(--space-26);
+  max-width: min(var(--width-prose), calc(100% - var(--space-20) * 2));
+  margin: var(--space-16) auto var(--space-26);
   padding: var(--space-22) var(--space-20);
   border-radius: var(--radius-panel);
   background: var(--color-surface-quiet);
@@ -470,12 +642,20 @@
 /* ---------- 2e Blog index ---------- */
 
 /* The card list. A ul in the markup, so the browser's bullets and indent are reset
-   here — the same three lines .fees needs above. */
+   here — the same three lines .fees needs above, and the same grid template, which
+   is explained there.
+
+   This is the list auto-fill was chosen for. The blog has one post today and grows
+   one file at a time, so it spends its whole life with fewer cards than columns.
+   auto-fill holds the empty tracks open, which keeps that one post the same size as
+   the ones that will appear beside it; auto-fit would collapse them and render it as
+   a single card the full width of the page until Sarah publishes a second. */
 .posts {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: var(--space-12);
-  margin: 0;
+  max-width: var(--width-content);
+  margin: 0 auto;
   padding: var(--space-18) var(--space-20) var(--space-26);
   list-style: none;
 }
@@ -531,6 +711,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-10);
+  max-width: var(--width-prose);
+  margin-inline: auto;
   padding: var(--space-26) var(--space-24) var(--space-10);
 }
 
@@ -574,6 +756,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-14);
+  max-width: var(--width-prose);
+  margin-inline: auto;
   padding: var(--space-4) var(--space-24) var(--space-10);
 }
 
@@ -689,13 +873,33 @@
   line-height: var(--leading-body);
 }
 
+/* Nothing on the site uses an <img> yet — the hero on 2a is a placeholder div — but
+   this is the one place one can appear without us touching a file: Sarah types
+   ![alt](…) in a post and markdown-it emits a bare img with no class on it. Without
+   this it would render at its intrinsic pixel size, so a photo straight off a phone
+   would be several thousand pixels wide and push the whole page sideways at 320.
+
+   max-width and not width, so a small image is not stretched up to the column.
+   height: auto because setting only the width would otherwise leave the intrinsic
+   height in place and squash it.
+
+   This pair belongs on a bare img selector in base.css's Document block, next to
+   box-sizing, so that it also covers the hero photo when it arrives. That file was
+   not in scope for this change — flagged, and one line to move it when it is. */
+.post-body img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* The periwinkle block that closes every post. Margin rather than padding, so the
-   colour stops short of the screen edge — the same reason .teaser uses one. */
+   colour stops short of the screen edge — the same reason .teaser uses one, and it
+   takes the same min() max-width, explained there. */
 .post-cta {
   display: flex;
   flex-direction: column;
   gap: var(--space-10);
-  margin: var(--space-14) var(--space-20) var(--space-26);
+  max-width: min(var(--width-prose), calc(100% - var(--space-20) * 2));
+  margin: var(--space-14) auto var(--space-26);
   padding: var(--space-20);
   border-radius: var(--radius-card);
   background: var(--color-surface-accent);
@@ -710,14 +914,23 @@
   font-size: var(--text-item-lead);
 }
 
-/* The third button in the set, and the only one on a periwinkle ground: dark teal,
-   where .button above is navy and .site-footer__button is periwinkle on the dark
-   footer. Scoped to this block rather than made a variant of .button — it differs
-   in ground, size and padding, which leaves only the radius shared.
+/* The second button in the set, and the only one on a periwinkle ground: dark teal,
+   where .button above is navy. Scoped to this block rather than made a variant of
+   .button — it differs in ground, size and padding, which leaves only the radius
+   shared.
 
-   No display: block. It is a flex item of .post-cta, so it already fills the
-   width, which is the same reason .site-footer__button does without one. */
+   No display: block. It is a flex item of .post-cta, so it already fills the width
+   without one — and because it is not .button it needs its own copy of that class's
+   350px cap rather than inheriting it. Same two declarations, same number, same
+   reason: 350px is the
+   width the design draws a button at, and below that the cap does nothing and the
+   button is full width as drawn. width: 100% for the reason spelled out on .button —
+   it is a flex item, and the auto margins would otherwise stop it stretching and
+   leave it label-width. */
 .post-cta__button {
+  width: 100%;
+  max-width: 350px;
+  margin-inline: auto;
   padding: var(--space-13) var(--space-20);
   border-radius: var(--radius-button);
   background: var(--color-surface-inverse);

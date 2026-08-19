@@ -1,9 +1,9 @@
 {#- Two footers in one file.
 
     On screens 2b-2f the dark block is email plus copyright. On 2a it also carries
-    "Get in touch", an intro line and the booking button — and the design labels
-    that same block the contact section. So on the homepage the contact section and
-    the footer are one thing, which is what the menu's /#contact points at.
+    "Get in touch" and an intro line — and the design labels that same block the
+    contact section. So on the homepage the contact section and the footer are one
+    thing, which is what the menu's /#contact points at.
 
     One partial with a flag rather than two partials, so the half they share cannot
     drift apart. Set contactFooter: true in the homepage's front matter; every other
@@ -23,7 +23,6 @@ Sarah's real address and final site name. Left exactly as designed. -#}
       TODO-SARAH: dedicated email address. hello@careercv.ie is the design's
       placeholder, awaiting Sarah's real address. Left exactly as designed. -#}
     <a class="site-footer__email" href="mailto:hello@careercv.ie">hello@careercv.ie</a>
-    {%- if contactFooter %}<a class="site-footer__button" href="/book/">Book a consultation</a>{%- endif %}
     <span class="site-footer__legal">© 2026 Career CV
         {% if contactFooter %}· Dublin, Ireland{% endif %}
     </span>
