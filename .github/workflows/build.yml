@@ -9,6 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+
     steps:
       - name: Check out the repository
         uses: actions/checkout@v5
@@ -24,3 +27,20 @@ jobs:
 
       - name: Build the site with Eleventy
         run: npm run build
+
+      - name: Deploy to smarthost.ie over FTPS
+        if: github.ref == 'refs/heads/main' && env.FTP_SERVER != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: _site/
+          server-dir: public_html/
+          # SAFETY CATCH — flip to false for the first real deploy.
+          # true means: connect, log in, and list every file it *would*
+          # transfer, but write nothing to the server. It is here so the
+          # first run with Sarah's real credentials proves the login and
+          # the two paths are correct without any risk to the live site.
+          dry-run: true
