@@ -3,15 +3,6 @@ layout: base.njk
 title: What clients say
 description: A few words from people Sarah has coached.
 ---
-{#- Screen 2b. As on 2a, title and description are the design's own h1 and lead,
-    used verbatim rather than written fresh.
-
-    No contactFooter here: its absence is what gives this page the compact dark
-    footer the design draws, rather than the homepage's full contact block.
-
-    No permalink either — Eleventy maps this file to /testimonials/, which is
-    what the nav and the homepage teaser already link to, and what makes
-    aria-current="page" fire in header.njk. -#}
 
 {#- TODO-SARAH: the testimonials themselves. All three are the design's
     placeholder, which announces itself on the page. Sarah's real words replace
@@ -19,44 +10,43 @@ description: A few words from people Sarah has coached.
 
     A list plus a loop rather than three copy-pasted blocks, the same call
     header.njk made for the nav: the markup is identical every time and only the
-    strings differ. The briefing asks for two to five of these, so the count
-    lives in one visible place and is one line to change. The grey/periwinkle
-    banding is not here — it is a nth-child rule in pages.css, so adding or
-    removing an entry cannot get the sequence wrong.
+    strings differ.
 
     The em dash sits in the template below and only the name and role are data,
     so a replacement is a paste of Sarah's text with no punctuation to match. -#}
 {% set testimonials = [
-  { quote: "Placeholder testimonial — three to four lines of client copy from Sarah goes here, fixed-size block.", by: "Client name, role" },
-  { quote: "Placeholder testimonial — three to four lines of client copy from Sarah goes here, fixed-size block.", by: "Client name, role" },
-  { quote: "Placeholder testimonial — three to four lines of client copy from Sarah goes here, fixed-size block.", by: "Client name, role" }
+  {
+    "quote": "Placeholder testimonial — three to four lines of client copy from Sarah goes here, fixed-size block.",
+    "by": "Client name, role"
+  },
+  {
+    "quote": "Placeholder testimonial — three to four lines of client copy from Sarah goes here, fixed-size block.",
+    "by": "Client name, role"
+  },
+  {
+    "quote": "Placeholder testimonial — three to four lines of client copy from Sarah goes here, fixed-size block.",
+    "by": "Client name, role"
+  }
 ] %}
-
 <div class="page-head">
   <h1 class="page-head__title">What clients say</h1>
   <p class="page-head__lead">A few words from people Sarah has coached.</p>
 </div>
-
 <section class="testimonials">
   {%- for t in testimonials %}
-
-  {#- A blockquote where the design has a plain div, and a footer where it has a
+    {#- A blockquote where the design has a plain div, and a footer where it has a
       second span — these are quotations with an attribution, the same call
-      index.njk made for the homepage teaser. No <cite>: that element is for the
-      title of a work, not a person's name.
+      index.njk made for the homepage teaser. 
 
       aria-hidden on the quote glyph. It is ornament, and without this a screen
       reader announces a stray quote mark before every testimonial. -#}
-  <blockquote class="testimonial">
-    <span class="testimonial__mark" aria-hidden="true">"</span>
-    <p class="testimonial__quote">{{ t.quote }}</p>
-    <footer class="testimonial__by">— {{ t.by }}</footer>
-  </blockquote>
+    <blockquote class="testimonial">
+      <span class="testimonial__mark" aria-hidden="true">"</span>
+      <p class="testimonial__quote">{{ t.quote }}</p>
+      <footer class="testimonial__by">
+        — {{ t.by }}
+      </footer>
+    </blockquote>
   {%- endfor %}
-
-  {#- The design's button points at screen 2d, so this is the Book page and not
-      the homepage's Calendly marker. Must stay the last child: the banding rule
-      in pages.css counts children, and a card after this one would be
-      miscoloured. -#}
   <a class="button" href="/book/">Book a consultation</a>
 </section>

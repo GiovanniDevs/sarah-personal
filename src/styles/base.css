@@ -1,19 +1,6 @@
-/* The page shell: document defaults, header, menu, footer. Nothing else.
-   Everything inside the shell — shared components and page sections — is in
-   pages.css, which loads after this file.
-
-   Every colour, font, size and space comes from tokens.css — there is no hex value
-   in this file. The exceptions are four component dimensions the token set has no
-   name for (the 30px brand mark, the 20/14/2px hamburger bars). They are literals
-   here, with the design's figure noted, because tokens.css says of itself that it
-   holds no layout and no components.
-
-   Mobile-first, with one breakpoint: min-width 680px, which lays the header nav out
-   horizontally. The approved design is six mobile screens and specifies nothing wider,
-   so that number is measured from the content rather than taken from a design — the
-   working is in the "Header, wide" section. The footer reuses the same 680 to grow its
-   vertical padding; it has no content threshold of its own to measure, and one
-   breakpoint value for the site beats two. Nothing else has a breakpoint. */
+/* The page shell: document defaults, header, menu, footer. Shared components and page
+   sections are in pages.css, which loads after this file and so can override it.
+   Mobile-first, one breakpoint site-wide (680px) — deliberately one number, not two. */
 
 
 /* ---------- Document ---------- */
@@ -24,21 +11,9 @@
   box-sizing: border-box;
 }
 
-/* The last three properties are the sticky footer: on a page with too little content
-   the dark band used to stop half way down the window, with bare surface below it.
-
-   min-height gives the page a floor of one windowful even when its content is shorter;
-   the column then hands the leftover height to <main> in the rule below, which pushes
-   the footer to the bottom. A page taller than the window has no leftover height, so
-   nothing about it changes.
-
-   min-height twice on purpose. dvh is the height actually visible right now, which is
-   what puts the footer at the bottom of a phone screen rather than behind the address
-   bar — vh is measured against the taller viewport with the bar hidden. A browser too
-   old to understand dvh drops that line as invalid and keeps the vh above it.
-
-   The three flex items are the header, <main> and the footer. The <script> at the end
-   of base.njk is display: none by default and never becomes one. */
+/* Sticky footer: min-height floors a short page at one windowful, and the column hands
+   the leftover height to <main>, pushing the footer down. Both min-heights are needed —
+   dvh clears a phone's address bar, vh is the fallback where dvh is not understood. */
 body {
   margin: 0;
   background: var(--color-surface);
@@ -52,10 +27,8 @@ body {
   flex-direction: column;
 }
 
-/* Grow into whatever height is left over, never shrink, start from content height.
-   <main> has no background, so the extra height is invisible — it only moves the
-   footer down. This is the one property <main> has anywhere; its width is still
-   nobody's business but the sections inside it, as pages.css describes. */
+/* Takes the leftover height so the footer is pushed to the bottom. Nothing else:
+   width is left to the sections inside, in pages.css. */
 main {
   flex: 1 0 auto;
 }
@@ -63,32 +36,17 @@ main {
 
 /* ---------- Focus ---------- */
 
-/* The one focus rule for the whole site. Nothing here removes an outline; this
-   replaces the browser's default, which is all the site had until now and which
-   differs per browser.
-
-   :focus-visible and not :focus — the browser decides when the ring is wanted, so
-   a mouse click on a button does not leave one behind while a Tab press does.
-
-   outline and outline-offset are the two properties that draw outside the box
-   without taking space, so no layout moves. --color-border-emphasis is the purple
-   already drawing the featured fee card's border: 5.46:1 on white, and no new token.
-
-   Undeclared here on purpose: any focus style for the menu panel's links. They sit
-   on white and inherit this rule, which is all they need. */
+/* The one focus rule for the whole site; it replaces the browser default rather than
+   removing it. :focus-visible and not :focus, so the browser decides when the ring is
+   wanted — Tab leaves one, a mouse click does not. The purple is 5.46:1 on white. */
 :focus-visible {
   outline: 2px solid var(--color-border-emphasis);
   outline-offset: 2px;
 }
 
-/* The three controls on a dark or saturated ground, where the purple above is too
-   close to what it sits on to be found. White is the one colour that reads on all
-   three grounds these use — navy, dark teal and periwinkle.
-
-   .button and .post-cta__button are styled in pages.css, not here. The selectors
-   live in this block anyway so that all three exceptions are visible in one place;
-   split across two files, the next person to add a dark-ground control would have
-   no single list to add to. */
+/* Controls on a dark or saturated ground, where the purple above would not be found.
+   Two of these are styled in pages.css but listed here anyway, so every dark-ground
+   exception stays in one list for whoever adds the next one. */
 .button:focus-visible,
 .site-footer__email:focus-visible,
 .post-cta__button:focus-visible {
@@ -98,8 +56,7 @@ main {
 
 /* ---------- Header ---------- */
 
-/* The border sits on the header rather than the bar, so when the menu is open the
-   hairline stays at the bottom of the whole thing, below the last link. */
+/* Border on the header, not the bar, so the hairline stays below an open menu panel. */
 .site-header {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
@@ -123,7 +80,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;   /* the mark's diameter in the design; a component size, not a token */
+  width: 30px;   /* a component size: tokens.css holds no layout and no components */
   height: 30px;
   border-radius: var(--radius-circle);
   background: var(--color-action);
@@ -142,9 +99,8 @@ main {
 
 /* ---------- Menu toggle ---------- */
 
-/* Hidden until the inline script in base.njk confirms JavaScript is running.
-   Without it the nav below stays permanently visible, and a hamburger sitting
-   above an already-open list would be a control that does nothing. */
+/* Hidden until the inline script in base.njk confirms JavaScript is running. Without
+   it the nav stays visible, and a hamburger above an open list would do nothing. */
 .menu-toggle {
   display: none;
 }
@@ -159,7 +115,6 @@ main {
   cursor: pointer;
 }
 
-/* 20px x 2px bars; the design makes the third one shorter at 14px. */
 .menu-toggle span {
   display: block;
   width: 20px;
@@ -174,10 +129,9 @@ main {
 
 /* ---------- Menu panel ---------- */
 
-/* One source of truth. aria-expanded on the button decides both what a screen
-   reader announces and whether the panel is shown, so menu.js only ever flips that
-   attribute. :has() is what lets CSS read it from here — the button and the panel
-   are not siblings, since the panel spans the full width below the header bar. */
+/* aria-expanded on the button is the single source of state: it is what the screen
+   reader announces and what shows the panel, so menu.js only flips that attribute.
+   :has() is how CSS reads it — button and panel are not siblings. */
 .js .site-nav {
   display: none;
 }
@@ -192,8 +146,7 @@ main {
   list-style: none;
 }
 
-/* The same hairline the header sits on, repeated between items. On the first item
-   it also separates the panel from the bar above it. */
+/* The header's hairline repeated between items; on the first it divides panel from bar. */
 .site-nav__list a {
   display: block;
   padding: var(--space-14) var(--space-20);
@@ -209,33 +162,14 @@ main {
 
 /* ---------- Header, wide ---------- */
 
-/* 680px is measured, not a device name. It is the narrowest width that fits the brand
-   and all six labels on one line with the brand still clear of the first item:
-
-     20 + 20  header padding
-     130.08   the brand, as rendered (30px mark + 9px gap + "Sarah Philip" in Marcellus)
-     26       the least space we will leave between brand and nav
-     350.57   the six labels at 15px Source Sans 3 — worst case, see below
-     100      five 20px gaps between them
-     = 646.65
-
-   Two things push it past that figure. One label is always semibold, because the current
-   page carries aria-current; on /book/ that widens the longest label, which is where
-   350.57 comes from rather than 347.33. And fonts.css sets font-display: swap, so the
-   labels first paint in system-ui — the same six come to 366.66 there, and 380.98 in the
-   generic sans-serif a browser without system-ui falls back to. Breaking at 647 would
-   wrap the nav for the length of every cold load and then snap it back, so the number
-   clears the widest fallback instead: 677.06, rounded up.
-
-   Re-measure if a label's text changes. "Book a consultation" is the one carrying it. */
+/* 680px is measured: the narrowest width fitting brand and all six nav labels on one line,
+   sized to the widest font-display: swap fallback and not the webfont, or the nav wraps on
+   every cold load. Re-measure if a label changes — "Book a consultation" carries it. */
 @media (min-width: 680px) {
 
-  /* The row is the header, not the bar. The nav is a sibling of .site-header__bar on
-     purpose — that is what lets the panel span the full width below it on a phone — so
-     rather than move it in the markup and put that panel at risk, the header becomes the
-     flex row and the bar hands its padding upwards. The bar is then a content-sized flex
-     item holding nothing but the brand. space-between pushes the two apart; the gap is
-     the floor that stops them meeting, and it is the 26 in the sum above. */
+  /* The header is the flex row, not the bar. The nav has to stay a sibling of the bar —
+     that is what lets the panel span the full width on a phone — so the header takes the
+     row and the bar hands its padding upwards, rather than the markup changing. */
   .site-header {
     display: flex;
     align-items: center;
@@ -248,23 +182,15 @@ main {
     padding: 0;
   }
 
-  /* Same specificity as the .js .menu-toggle rule that reveals it, further down the file,
-     so it wins on source order. That is what keeps this a min-width query — matching the
-     specificity rather than out-running it is what makes mobile-first possible here. */
+  /* Same specificity as the .js .menu-toggle rule it overrides, so it wins on source
+     order. Matching that specificity rather than out-running it keeps this mobile-first. */
   .js .menu-toggle {
     display: none;
   }
 
-  /* Above this width the nav is visible whatever aria-expanded says, and the two rules
-     that could argue about it cannot.
-
-     The open-state rule up there scores (0,5,0) — :has() takes the specificity of its
-     argument — against (0,2,0) for `.js .site-nav`. A media query adds nothing to
-     specificity, so restating only the plain selector would quietly lose. Two things
-     prevent that. Both selectors are repeated here, so this block wins on source order at
-     equal specificity. And the value is block, exactly what the open-state rule sets, so
-     even if one of them were changed the answer would come out the same. The horizontal
-     layout is applied one level down on the list, where nothing else touches display. */
+  /* Above this width the nav shows whatever aria-expanded says. Both selectors are
+     repeated on purpose — the open-state rule scores (0,5,0) since :has() takes its
+     argument's specificity, and a media query adds none, so dropping either breaks it. */
   .js .site-nav,
   .js .site-header:has(.menu-toggle[aria-expanded="true"]) .site-nav {
     display: block;
@@ -275,10 +201,6 @@ main {
     gap: var(--space-20);
   }
 
-  /* No order, no row-reverse anywhere above: visual order is DOM order, so tab order needs
-     no correcting. The border-top was the panel's separator and has nothing to separate in
-     a row. The focus ring from :focus-visible is 2px at 2px offset — 4px each side, well
-     inside the 20px gap, so neighbouring rings never touch. */
   .site-nav__list a {
     padding: var(--space-6) 0;
     border-top: 0;
@@ -289,21 +211,9 @@ main {
 
 /* ---------- Footer ---------- */
 
-/* Screens 2b-2f: email and copyright on the dark ground.
-
-   The dark band spans the viewport; its contents do not. A grid of one centred track
-   is what separates those two, and it does it without a wrapper element — the band is
-   the padding box, the track is the column inside it. A flex column could not: capping
-   it would cap the background with it.
-
-   min(--width-prose, 100%) is the same idiom .teaser and .book-panel use in pages.css.
-   The 100% is the padded content box, so at 390px the track is min(500, 342) = 342 and
-   the phone renders exactly as drawn; the cap only starts doing anything above 548.
-   Children stretch to the track by default, so the stack stays left-aligned throughout.
-
-   --width-prose and not --width-content: the contents here are prose — a heading, an
-   intro line, an email — so the column lines up with .hero and .about above it rather
-   than with the card grids. */
+/* The dark band spans the viewport, its contents do not. One centred grid track does that
+   without a wrapper; a flex column could not, as capping it would cap the background too.
+   --width-prose, not --width-content, so the column lines up with .hero and .about. */
 .site-footer {
   display: grid;
   grid-template-columns: min(var(--width-prose), 100%);
@@ -325,12 +235,9 @@ main {
 }
 
 
-/* Screen 2a: the same block doing double duty as the contact section.
-
-   Two differences below look like slips in the mockup and are not, so they are
-   reproduced as drawn: the email is 15px here against 14px everywhere else, and
-   only this variant carries a top margin — it is what separates the block from the
-   testimonial teaser above it, which has no bottom margin of its own. */
+/* The same block doing double duty as the home page's contact section. The larger email
+   and the top margin are deliberate, not slips: the margin is what separates this from
+   the testimonial teaser above, which has no bottom margin of its own. */
 .site-footer--contact {
   gap: var(--space-10);
   margin-top: var(--space-24);
@@ -341,8 +248,8 @@ main {
   font-size: var(--text-body);
 }
 
-/* A heading element where the design has a plain span, so the contact section is
-   announced as one. Marcellus ships at 400 only, hence the explicit weight. */
+/* A real heading element, so the contact section is announced as a section. Marcellus
+   ships at 400 only, hence the explicit weight. */
 .site-footer__heading {
   margin: 0;
   color: var(--color-text-on-inverse);
@@ -365,26 +272,10 @@ main {
 
 /* ---------- Footer, wide ---------- */
 
-/* Padding only. The column above has already reached its 500px cap by 548px, well
-   below this query, so nothing here fights it and nothing reflows as the line is
-   crossed — the band simply gets taller.
-
-   It needs to. The compact footer's contents are a 14px email and a 12px copyright,
-   about 40px in total; at 18px padding the band is a 76px strip across the bottom of a
-   1440px screen rather than a band. Both variants double — 18 to 40, 24 to 48 — which
-   keeps the difference the design draws between them.
-
-   calc() over a spacing token rather than a new token: tokens.css stops at --space-26
-   and holds no layout, and .teaser in pages.css already multiplies a space token this
-   way. The horizontal 24 is restated unchanged so each of these is a whole shorthand;
-   the gutter on a phone is not what is being fixed here.
-
-   680 is the header's number, reused. Unlike the header the footer has nothing to
-   measure — no content overflows, the band is just too thin — so this borrows the one
-   breakpoint the site already has instead of introducing a second.
-
-   A second min-width: 680px block, and not merged into the header's, because that one
-   sits above the footer's own rules and these have to come after what they override. */
+/* Padding only — the column hit its cap below this width, so nothing reflows; the band
+   just stops reading as a strip on a desktop screen. 680 is the header's number reused:
+   one breakpoint for the site, not two. calc(), not a new token, as tokens.css holds no
+   layout. A separate block from the header's, as these must come after what they override. */
 @media (min-width: 680px) {
 
   .site-footer {

@@ -4,20 +4,7 @@ title: Book a consultation
 description: Booking is by email. Send Sarah a short message and she'll reply to arrange a time that suits you.
 ---
 
-{#- Screen 2d, minus the Calendly. The mockup predates the briefing's decision
-    that booking is by email — see "Pages in scope" and section 5, and the note
-    saying the briefing wins. So: layout and type from 2d, content from the
-    briefing. No Calendly button, no "opens in a new tab" caption, and no
-    "Prefer email?" block — it was the fallback under that button, and email is
-    now the page itself.
-
-    No permalink and no contactFooter, as on 2b and 2c: this file maps to /book/,
-    which the nav and the buttons on 2b and 2c already point at, and the compact
-dark footer comes from leaving contactFooter unset. -#}
-{#- PROPOSED COPY, awaiting your sign-off. The h1 is the design's own, verbatim;
-    the lead and the three steps are new, because what they replace was about
-    Calendly. Two facts are reused rather than invented: "free 20-minute intro
-    call" from 2a and 2c, "within one working day" from footer.njk. -#}
+{#- No contactFooter in the front matter: leaving it unset selects the compact dark footer. -#}
 {% set steps = [
   "You email Sarah — a couple of lines about where you are is plenty",
   "She replies within one working day with a few times",
@@ -30,11 +17,9 @@ dark footer comes from leaving contactFooter unset. -#}
   </p>
 </div>
 <div class="book-panel">
-  {#- An ol where the design has plain divs — three steps in a fixed order are an
-      ordered list, and saying so gets "list, 3 items" announced first. The
-      numbers are spans rather than ::marker because the design gives them a
-      colour, a weight and a 16px column, and a span is the duller way to get all
-      three. No aria-hidden: like the badge on 2c they are information. -#}
+  {#- An ol: three steps in a fixed order, so a screen reader announces "list, 3
+      items". The numbers are spans, not ::marker, because they need their own
+      colour and weight — and no aria-hidden, they are content. -#}
   <ol class="book-steps">
     {%- for step in steps %}
       <li class="book-step">
@@ -43,29 +28,17 @@ dark footer comes from leaving contactFooter unset. -#}
     {%- endfor %}
   </ol>
   {#- TODO-SARAH: the dedicated email address — briefing section 6, question 4.
-      Two lines change when we have it and nothing else on this page: this href
-      becomes mailto:ADDRESS?subject=Consultation%20enquiry, and the span below
-      becomes the address.
+      Two lines change when we have it: this href becomes
+      mailto:ADDRESS?subject=Consultation%20enquiry, and the span below becomes
+      the address.
 
-      The href is deliberately not a URL, so it 404s and the marker survives into
-      _site — the convention index.njk uses. Specifically not
-      mailto:TODO-SARAH-…, which is a valid mailto: and would open a compose
-      window addressed to nonsense: exactly the silent failure this guards
-      against. subject= and no body=: it labels the enquiry in Sarah's inbox,
-      stays plain ASCII so the encoding is legible, and puts no words in the
-      visitor's mouth. -#}
+      Do not make this a valid mailto: in the meantime. mailto:TODO-SARAH-… is
+      valid, so it opens a compose window addressed to nonsense — a silent
+      failure. A non-URL 404s instead, and the marker survives into _site. -#}
   <a class="button" href="TODO-SARAH-email-address">Email Sarah to book</a>
-  {#- 2d's "Opens calendly.com in a new tab" slot, now load-bearing. A mailto: on
-      a device with no mail client does nothing visible, so the address must be
-      readable, selectable text too. One sentence says what the button does and
-      names the address, so neither element repeats the other, and it sits under
-      the thumb at the moment the button failed.
-
-      Plain text, not a second mailto:, which would give a screen reader two
-      adjacent links to the same place. Its type is the one deliberate departure
-      from the mockup: 2d's caption is 12.5px in --color-text-caption, ~2.6:1 on
-      this grey — fine for a throwaway note, not for the one string a visitor may
-      have to read off the screen and type elsewhere. -#}
+  {#- The address must be readable, selectable text: a mailto: on a device with
+      no mail client does nothing visible. Plain text, not a second mailto:,
+      which would give a screen reader two adjacent links to the same place. -#}
   <p class="book-panel__address">
     Opens your email app, addressed to <span class="book-panel__email">TODO-SARAH — email address</span>
   </p>
