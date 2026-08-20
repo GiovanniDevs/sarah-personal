@@ -43,4 +43,4 @@ jobs:
           # transfer, but write nothing to the server. It is here so the
           # first run with Sarah's real credentials proves the login and
           # the two paths are correct without any risk to the live site.
-          dry-run: true
+          dry-run: false
