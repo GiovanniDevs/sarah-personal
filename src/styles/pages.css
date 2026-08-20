@@ -13,7 +13,6 @@
 
    Mobile-first with one breakpoint — see Layout below. */
 
-
 /* ---------- Layout ---------- */
 
 /* How this page widens, in one place. Nothing in this section is a rule; it is the
@@ -52,7 +51,6 @@
 
    Heading sizes scale with the viewport; body sizes do not. Both live in tokens.css,
    which is also where the list of headings that deliberately do not scale is kept. */
-
 
 /* ---------- Components ---------- */
 
@@ -171,7 +169,6 @@
   line-height: var(--leading-compact);
 }
 
-
 /* ---------- 2a Home ---------- */
 
 /* The hero frame. Padding on the frame rather than a wrapper, so the box below
@@ -206,7 +203,7 @@
   display: block;
   width: 100%;
   aspect-ratio: 3 / 2;
-  max-height: 420px;
+  max-height: 520px;
   object-fit: cover;
   border-radius: var(--radius-panel);
 }
@@ -306,7 +303,6 @@
   text-decoration: none;
 }
 
-
 /* ---------- 2a Home, wide ---------- */
 
 /* The hero image goes edge to edge; everything below it stays in the reading
@@ -326,7 +322,6 @@
    off — which is also the point at which the 420px cap is already in charge, so
    the band widens from here without deepening. */
 @media (min-width: 680px) {
-
   .hero-media {
     padding: 0;
   }
@@ -335,9 +330,7 @@
   .hero-media__photo {
     border-radius: 0;
   }
-
 }
-
 
 /* ---------- 2b Testimonials ---------- */
 
@@ -439,7 +432,6 @@
 .testimonial:nth-child(even) .testimonial__by {
   color: var(--color-text-on-quiet);
 }
-
 
 /* ---------- 2c Fees ---------- */
 
@@ -571,7 +563,6 @@
   text-align: center;
 }
 
-
 /* ---------- 2d Book ---------- */
 
 /* The grey panel holding the steps, the button and the address.
@@ -651,7 +642,6 @@
   font-weight: var(--weight-semibold);
 }
 
-
 /* ---------- 2e Blog index ---------- */
 
 /* The card list. A ul in the markup, so the browser's bullets and indent are reset
@@ -712,7 +702,6 @@
   position: absolute;
   inset: 0;
 }
-
 
 /* ---------- 2f Blog post ---------- */
 
