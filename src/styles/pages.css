@@ -2,10 +2,10 @@
    everything inside it.
 
    Same contract as base.css: every colour, font, size and space comes from
-   tokens.css and there is no hex value here. The one exception is a component
-   dimension the token set has no name for — the 240px hero frame — a literal
-   with the design's figure noted, because tokens.css says of itself that it
-   holds no layout and no components.
+   tokens.css and there is no hex value here. The exceptions are component
+   dimensions the token set has no name for — the hero photo's ratio and its
+   depth cap — literals with their working noted at the rule, because tokens.css
+   says of itself that it holds no layout and no components.
 
    Organised shared components first, then page sections under headers keyed to
    the design's screen IDs. A style earns a place in Components once it has more
@@ -180,22 +180,35 @@
   padding: var(--space-20) var(--space-20) 0;
 }
 
-/* Awaiting Sarah's photo. A div and not an img: there is no image to describe
-   yet, so an img would give a broken icon and a meaningless alt. It reproduces
-   the mockup's empty image slot, and becomes an img once the photo arrives.
+/* Sarah's photo. Two rules decide the shape of the band and neither depends on
+   the file: aspect-ratio governs it at narrow widths, max-height at wide ones.
+   object-fit: cover then scales whatever she uploads until it covers that band
+   and crops the overflow, so no photo is ever stretched and no photo changes the
+   layout. Both literals are component sizes, not tokens.
 
-   240px is the design's hero height; a component size, not a token. */
-.hero-media__placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 240px;
-  padding: var(--space-12);
-  border: 1px dashed var(--color-border-placeholder);
+   3/2 rather than the mockup's 350x240 (35:24, 1.458). At the 390px mockup width
+   3/2 gives a 233px band against the drawn 240 — 7px — and in exchange it is the
+   native ratio of most cameras, so a landscape photo loses least to the crop.
+
+   420px because above 680 this band is full-bleed and 3/2 would otherwise scale
+   without limit: a 1440px window would give a 960px-deep photo, taller than the
+   window, leaving nothing but the picture above the fold. The cap starts biting
+   around a 630px viewport; past that the band holds at 420
+   and the crop simply widens. On a 1366x768 laptop that leaves ~220px under the
+   header for the h1, which is the number to revisit if the cap ever changes.
+
+   display: block kills the inline-element baseline gap under the image.
+
+   If she ever uploads a portrait photo this still will not break — but cover will
+   cut roughly three quarters of its height at desktop width, taking her face with
+   it. The fix is a landscape crop, not a rule here. */
+.hero-media__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  max-height: 420px;
+  object-fit: cover;
   border-radius: var(--radius-panel);
-  color: var(--color-text-placeholder);
-  font-size: var(--text-caption);
-  text-align: center;
 }
 
 /* Headline, lead, button and the Calendly note. The bottom padding is 8 rather
@@ -307,19 +320,19 @@
 
    680px is base.css's number, not a second one. See Layout.
 
-   The placeholder's 240px height is deliberately left alone, so this band is much
-   shallower in proportion here than the mockup draws it. It is Sarah's photo slot:
-   until there is a photo, there is no aspect ratio to design to, and picking one
-   now would be choosing a crop for an image nobody has seen. Revisit when it
-   arrives — this is the rule to change, and it is the only one. */
+   The photo's proportions are settled and need nothing here: aspect-ratio and
+   max-height are both in the base rule above, where the working is, and they carry
+   across this breakpoint unchanged. All that happens at 680 is the padding coming
+   off — which is also the point at which the 420px cap is already in charge, so
+   the band widens from here without deepening. */
 @media (min-width: 680px) {
 
   .hero-media {
     padding: 0;
   }
 
-  /* Nothing to round off against, once the frame reaches the screen edges. */
-  .hero-media__placeholder {
+  /* Nothing to round off against, once the photo reaches the screen edges. */
+  .hero-media__photo {
     border-radius: 0;
   }
 

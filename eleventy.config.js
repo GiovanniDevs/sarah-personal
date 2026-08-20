@@ -4,6 +4,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/fonts");
   eleventyConfig.addPassthroughCopy("src/styles");
   eleventyConfig.addPassthroughCopy("src/scripts");
+  eleventyConfig.addPassthroughCopy("src/images");
 
   // "12 Aug 2026", the date as drawn on 2e and 2f. Front matter dates are parsed
   // at UTC midnight, so this formats in UTC too — formatting in a zone behind UTC

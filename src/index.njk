@@ -18,11 +18,13 @@ contactFooter: true
 {#- Screen 2a. title and description are the design's own h1 and lead paragraph,
     used verbatim rather than written fresh — both are already approved copy. -#}
 
-{#- TODO-SARAH: hero photo. The box below is the mockup's empty image slot, kept
-    as a div because there is nothing to describe in an alt yet. When the photo
-    arrives, replace the inner div with an <img> and write its alt. -#}
+{#- The hero photo. src is fixed: Sarah replaces the file at that exact path and
+    nothing here changes. width/height are the file's own pixels — they reserve
+    the box before it loads so the headline below does not jump; the CSS overrides
+    both. sarah-hero.jpg is currently a placeholder graphic, awaiting her photo. -#}
 <div class="hero-media">
-  <div class="hero-media__placeholder">Sarah — personal photo</div>
+  <img class="hero-media__photo" src="/images/sarah-hero.jpg"
+       alt="Sarah Philip, career coach" width="1500" height="1000">
 </div>
 
 <div class="hero">
